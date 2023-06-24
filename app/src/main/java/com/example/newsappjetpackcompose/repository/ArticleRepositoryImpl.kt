@@ -3,11 +3,12 @@ package com.example.newsappjetpackcompose.repository
 import androidx.lifecycle.LiveData
 import com.example.newsappjetpackcompose.db.ArticleDao
 import com.example.newsappjetpackcompose.model.Article
+import kotlinx.coroutines.flow.Flow
 
 class ArticleRepositoryImpl(
     private  val articleDao: ArticleDao
 ):ArticleRepository {
-    override fun getAllArticles(): LiveData<List<Article>> {
+    override fun getAllArticles(): Flow<List<Article>> {
         return articleDao.getAllArticles()
     }
 
