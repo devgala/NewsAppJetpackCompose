@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.example.newsappjetpackcompose.view.NewsScreenUI
 import com.example.newsappjetpackcompose.view.SavedScreenUI
 import com.example.newsappjetpackcompose.view.SearchScreenUI
+import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 
 
 @Composable
@@ -15,7 +16,7 @@ fun NavConfiguration(
 ){
   NavHost(navController = navController, startDestination = Screens.NewsScreen.route, builder = {
       composable(Screens.NewsScreen.route){
-          NewsScreenUI()
+          SavedScreenUI()
       }
       composable(Screens.SavedScreen.route){
          SavedScreenUI()
