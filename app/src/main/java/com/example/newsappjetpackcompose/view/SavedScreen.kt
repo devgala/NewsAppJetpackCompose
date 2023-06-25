@@ -13,21 +13,21 @@ import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
 
 
 @Composable
-fun SavedScreenUI(viewModel : SavedScreenViewModel) {
-    val articles = viewModel.articles.collectAsState(initial = emptyList())
-    LaunchedEffect(key1 = true){
-        viewModel.uiEvent.collect{
-            event ->
-            when(event){
-                is UiEventsSavedScreen.showSnackBar ->{
-
-                }
-                is UiEventsSavedScreen.openWebView ->{
-
-                }
-            }
-        }
-    }
+fun SavedScreenUI() {
+//    val articles = viewModel.articles.collectAsState(initial = emptyList())
+//    LaunchedEffect(key1 = true){
+//        viewModel.uiEvent.collect{
+//            event ->
+//            when(event){
+//                is UiEventsSavedScreen.showSnackBar ->{
+//
+//                }
+//                is UiEventsSavedScreen.openWebView ->{
+//
+//                }
+//            }
+//        }
+//    }
 
 
 
