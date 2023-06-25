@@ -19,12 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.newsappjetpackcompose.Article
 import com.example.newsappjetpackcompose.R
 
-@Preview
 @Composable
-fun NewsCard(
-){
+fun NewsCard(article: Article){
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -49,15 +48,15 @@ fun NewsCard(
                         contentDescription = "",
                         contentScale = ContentScale.Crop)
                 }
-                Text(text = "News Source", modifier = Modifier.wrapContentHeight(), maxLines = 1)
-                Text(text = "News date", modifier = Modifier.wrapContentHeight(), maxLines = 1)
+                Text(text = article.source.name, modifier = Modifier.wrapContentHeight(), maxLines = 1)
+                Text(text = article.publishedAt, modifier = Modifier.wrapContentHeight(), maxLines = 1)
             }
             Column(
                 modifier = Modifier
                     .weight(5f)
                     .wrapContentHeight(), verticalArrangement = Arrangement.SpaceBetween) {
-                Text(text = "News Title", modifier = Modifier.fillMaxWidth().wrapContentHeight(),maxLines = 3, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                Text(text = "News date", modifier = Modifier.fillMaxWidth().wrapContentHeight(), maxLines = 1)
+                Text(text = article.title, modifier = Modifier.fillMaxWidth().wrapContentHeight(),maxLines = 3, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                Text(text = article.title, modifier = Modifier.fillMaxWidth().wrapContentHeight(), maxLines = 1)
             }
 
         }

@@ -16,6 +16,6 @@ interface NewsAPI {
         pageNumber: Int = 1,
         @retrofit2.http.Query("apiKey")
         apiKey: String = API_KEY
-    ): Response<NewsResponse>
+    ): NewsResponse
 
 }
