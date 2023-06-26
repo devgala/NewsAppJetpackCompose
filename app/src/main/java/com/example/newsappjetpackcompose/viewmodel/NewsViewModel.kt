@@ -21,6 +21,7 @@ class NewsViewModel : ViewModel() {
         viewModelScope.launch {
             try{
                 val newsResponse = repository.getBreakingNews("in", breakingNewsPage)
+                Log.d("ViewModelTest", newsResponse.totalResults.toString())
                 _breakingNews.value=newsResponse
             } catch (e: Exception){
                 Log.d("Api Call", e.stackTrace.toString())

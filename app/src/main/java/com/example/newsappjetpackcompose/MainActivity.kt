@@ -26,8 +26,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NewsAppJetpackComposeTheme {
-                NewsScreenUI(viewModel)
-
+//                NewsScreenUI(viewModel)
+                  MainScreen(viewModel)
+//                Navigation(newsViewModel = viewModel)
             }
         }
 
@@ -37,13 +38,13 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModel: NewsViewModel) {
     val navController = rememberNavController()
-    val navList = listOf(Screens.NewsScreen,Screens.SearchScreen,Screens.SavedScreen)
+    val navList = listOf(Screens.NewsScreenNav,Screens.SearchScreen,Screens.SavedScreen)
     Scaffold(
         bottomBar = { BottomNavBar(navController = navController, items = navList)}
     ) {
-        NavConfiguration(navController = navController)
+        NavConfiguration(navController = navController, newsViewModel = viewModel)
     }
 
 }
@@ -55,10 +56,10 @@ fun MainScreen() {
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    NewsAppJetpackComposeTheme {
-      MainScreen()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DefaultPreview() {
+//    NewsAppJetpackComposeTheme {
+//      MainScreen()
+//    }
+//}

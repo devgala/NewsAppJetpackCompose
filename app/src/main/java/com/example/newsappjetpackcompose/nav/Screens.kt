@@ -7,7 +7,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screens(val icon:ImageVector,val route:String,val label:String){
-    object NewsScreen:Screens(Icons.Default.Home,"NewsScreen","News")
+    object NewsScreenNav:Screens(Icons.Default.Home,"NewsScreenNav","News")
     object SavedScreen:Screens(Icons.Default.Done,"SavedScreen","Saved")
     object SearchScreen:Screens(Icons.Default.Search,"SearchScreen","Search")
 

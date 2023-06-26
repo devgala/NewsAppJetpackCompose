@@ -1,6 +1,8 @@
 package com.example.newsappjetpackcompose.uicomponents
 
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,17 +21,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.newsappjetpackcompose.Article
 import com.example.newsappjetpackcompose.R
+import com.example.newsappjetpackcompose.Screen
+import com.example.newsappjetpackcompose.events.SavedScreenEvents
 
 @Composable
-fun NewsCard(article: Article){
+fun NewsCard(article: Article, navController: NavController){
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth()
             .padding(8.dp)
+            .clickable {
+                Log.d("fromNewsCard", article.url)
+                navController.navigate(Screen.WebViewScreenUI.route + "/" + article.url)
+            }
     ){
         Row (
             modifier = Modifier
