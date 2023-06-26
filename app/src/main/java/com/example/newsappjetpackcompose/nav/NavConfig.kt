@@ -15,25 +15,19 @@ import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 
 @Composable
 fun NavConfiguration(
-    navController: NavHostController
+    navController: NavHostController,
+viewModel: NewsViewModel,
+snackbarHostState: SnackbarHostState
 ){
   NavHost(navController = navController, startDestination = Screens.NewsScreen.route, builder = {
       composable(Screens.NewsScreen.route){
-          //SavedScreenUI()
+          NewsScreenUI(newsViewModel = viewModel)
 
       }
       composable(
           route = Screens.SavedScreen.route,
-
-//          arguments = listOf(
-//              navArgument(name = "scfState"){
-//                  type = NavType.inferFromValueType(SnackbarHostState())
-//                  defaultValue = SnackbarHostState()
-//                  nullable = false
-//              }
-//          )
       ){
-          SavedScreenUI()
+          SavedScreenUI(snackbarHostState=snackbarHostState)
       }
       composable(Screens.SearchScreen.route){
           SearchScreenUI()

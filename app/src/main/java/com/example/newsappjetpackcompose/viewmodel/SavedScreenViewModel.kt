@@ -38,6 +38,11 @@ class SavedScreenViewModel @Inject constructor(private val repository:ArticleRep
                     }
                 }
             }
+            is SavedScreenEvents.onClickAdd->{
+                viewModelScope.launch {
+                    repository.insertArticle(event.article)
+                }
+            }
         }
     }
     fun sendUIEvent(event: UiEventsSavedScreen){
