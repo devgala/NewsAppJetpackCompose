@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.newsappjetpackcompose"
-        minSdk 24
+        minSdk 25
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -49,6 +49,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.wear.compose:compose-material:1.0.0-alpha19'
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
             because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
