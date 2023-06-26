@@ -1,9 +1,12 @@
 package com.example.newsappjetpackcompose.nav
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.newsappjetpackcompose.view.NewsScreenUI
 import com.example.newsappjetpackcompose.view.SavedScreenUI
 import com.example.newsappjetpackcompose.view.SearchScreenUI
@@ -16,10 +19,21 @@ fun NavConfiguration(
 ){
   NavHost(navController = navController, startDestination = Screens.NewsScreen.route, builder = {
       composable(Screens.NewsScreen.route){
-          SavedScreenUI()
+          //SavedScreenUI()
+
       }
-      composable(Screens.SavedScreen.route){
-         SavedScreenUI()
+      composable(
+          route = Screens.SavedScreen.route,
+
+//          arguments = listOf(
+//              navArgument(name = "scfState"){
+//                  type = NavType.inferFromValueType(SnackbarHostState())
+//                  defaultValue = SnackbarHostState()
+//                  nullable = false
+//              }
+//          )
+      ){
+          SavedScreenUI()
       }
       composable(Screens.SearchScreen.route){
           SearchScreenUI()

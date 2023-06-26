@@ -13,8 +13,9 @@ data class Article(
     val url:String,
     val urlToImage:String,
     val content:String,
-    @Ignore val source:Source
+
 ){
     @PrimaryKey(autoGenerate = true) var id:Int = 0
+    @Ignore val source:Source = Source("null","DNE")
     @ColumnInfo("source_name") var source_name = source.name
 }

@@ -18,7 +18,9 @@ import com.example.newsappjetpackcompose.ui.theme.NewsAppJetpackComposeTheme
 import com.example.newsappjetpackcompose.view.BottomNavBar
 import com.example.newsappjetpackcompose.view.NewsScreenUI
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel: NewsViewModel by viewModels()
@@ -26,7 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NewsAppJetpackComposeTheme {
-                NewsScreenUI(viewModel)
+                MainScreen(viewModel = viewModel)
 
             }
         }
@@ -37,12 +39,13 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModel: NewsViewModel) {
     val navController = rememberNavController()
     val navList = listOf(Screens.NewsScreen,Screens.SearchScreen,Screens.SavedScreen)
     Scaffold(
         bottomBar = { BottomNavBar(navController = navController, items = navList)}
     ) {
+        NewsScreenUI(viewModel)
         NavConfiguration(navController = navController)
     }
 
@@ -59,6 +62,6 @@ fun MainScreen() {
 @Composable
 fun DefaultPreview() {
     NewsAppJetpackComposeTheme {
-      MainScreen()
+     // MainScreen()
     }
 }

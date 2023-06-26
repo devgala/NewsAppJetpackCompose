@@ -87,6 +87,6 @@ fun Preview(){
         "www.google.com",
         "https://images.pexels.com/photos/17211591/pexels-photo-17211591/free-photo-of-bicycle-parked-under-building-painted-blue.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
         "This is content",
-        Source("id","Source Name")
+       // Source("id","Source Name")
     ), onEvent ={event -> print(event)})
 }
