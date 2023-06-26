@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.newsappjetpackcompose.model.Article
 
-@Database(entities = [Article::class], version = 1)
+@Database(entities = [Article::class], version = 1, exportSchema = false)
 abstract class ArticleDatabase : RoomDatabase() {
     abstract val articleDAO: ArticleDao
 
