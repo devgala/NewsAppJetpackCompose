@@ -13,6 +13,7 @@ data class Article(
     val url:String,
     val urlToImage:String,
     val content:String,
+    val publishedAt: String,
 
 ){
     @PrimaryKey(autoGenerate = true) var id:Int = 0

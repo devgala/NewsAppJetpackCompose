@@ -28,21 +28,20 @@ import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SavedScreenUI(viewModel: SavedScreenViewModel= hiltViewModel()) {
+fun SavedScreenUI(viewModel: SavedScreenViewModel= hiltViewModel(),snackbarHostState: SnackbarHostState) {
     val articles = viewModel.articles.collectAsState(initial = emptyList())
-   // val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(key1 = true){
         viewModel.uiEvent.collect{
             event ->
             when(event){
                 is UiEventsSavedScreen.showSnackBar ->{
-//                    val result = snackbarHostState.showSnackbar(
-//                        message = event.message,
-//                        actionLabel = event.action
-//                    )
-//                    if(result==SnackbarResult.ActionPerformed){
-//                        viewModel.onEvent(SavedScreenEvents.onClickUndoDelete)
-//                    }
+                    val result = snackbarHostState.showSnackbar(
+                        message = event.message,
+                        actionLabel = event.action
+                    )
+                    if(result==SnackbarResult.ActionPerformed){
+                        viewModel.onEvent(SavedScreenEvents.onClickUndoDelete)
+                    }
 
                 }
                 is UiEventsSavedScreen.openWebView ->{
