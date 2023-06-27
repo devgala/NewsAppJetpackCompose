@@ -27,10 +27,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.ContentAlpha
 import com.example.newsappjetpackcompose.NewsResponse
 import com.example.newsappjetpackcompose.uicomponents.NewsCard
+import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 
 @Composable
@@ -44,6 +46,7 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel) {
         viewModel.fetchSearchedNews()
     })
 
+    var savedScreenViewModel: SavedScreenViewModel = hiltViewModel()
     LazyColumn(
         modifier = Modifier
             .padding(60.dp)
@@ -51,7 +54,7 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel) {
         itemsIndexed(
             newsResponse.articles
         ) { index, article ->
-            NewsCard(article)
+            NewsCard(article, savedScreenViewModel::onEvent)
         }
     }
 }
