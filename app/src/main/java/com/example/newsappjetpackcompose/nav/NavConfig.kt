@@ -23,8 +23,7 @@ fun NavConfiguration(
 ){
   NavHost(navController = navController, startDestination = Screens.NewsScreen.route, builder = {
       composable(Screens.NewsScreen.route){
-          NewsScreenUI(newsViewModel = newsViewModel)
-
+          NewsScreenUI(newsViewModel = newsViewModel, snackbarHostState=snackbarHostState)
       }
       composable(
           route = Screens.SavedScreen.route,
@@ -33,6 +32,7 @@ fun NavConfiguration(
       }
       composable(Screens.SearchScreen.route){
           SearchScreenUI(searchViewModel = searchViewModel)
+
       }
   })
 }
