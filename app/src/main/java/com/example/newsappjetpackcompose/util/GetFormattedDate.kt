@@ -10,11 +10,13 @@ fun getFormattedDate(date:String):String
 {
     val input = SimpleDateFormat("yyyy-MM-dd")
     val output = SimpleDateFormat("dd/MM/yyyy")
-    var d = Date()
+    var d:Date? = null
     try {
         d = input.parse(date)
     }catch (e: ParseException){
         println(e)
     }
-    return output.format(d)?:"Not Available"
+    return if(d!=null)
+        output.format(d)?:"Not Available"
+    else "Not Available"
 }
