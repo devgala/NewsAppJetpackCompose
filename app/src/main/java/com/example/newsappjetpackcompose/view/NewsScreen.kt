@@ -53,7 +53,9 @@ fun NewsScreenUI(newsViewModel: NewsViewModel,snackbarHostState: SnackbarHostSta
                         duration = SnackbarDuration.Short
                         , withDismissAction = true
                     )
-
+                    if(result==SnackbarResult.Dismissed){
+                        savedScreenViewModel.onEvent(SavedScreenEvents.onNotClickUndoAdd)
+                    }
                 }
                 is UiEventsSavedScreen.openWebView->{
 

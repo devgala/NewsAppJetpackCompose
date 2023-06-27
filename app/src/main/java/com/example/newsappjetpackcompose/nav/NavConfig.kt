@@ -2,6 +2,7 @@ package com.example.newsappjetpackcompose.nav
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -31,7 +32,7 @@ fun NavConfiguration(
           SavedScreenUI(snackbarHostState=snackbarHostState)
       }
       composable(Screens.SearchScreen.route){
-          SearchScreenUI(searchViewModel = searchViewModel)
+          SearchScreenUI(searchViewModel = searchViewModel,snackbarHostState=snackbarHostState)
 
       }
   })

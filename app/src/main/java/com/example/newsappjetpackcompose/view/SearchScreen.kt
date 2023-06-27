@@ -1,5 +1,6 @@
 package com.example.newsappjetpackcompose.view
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,10 +13,16 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -26,37 +33,66 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-//import androidx.wear.compose.material.ContentAlpha
 import com.example.newsappjetpackcompose.NewsResponse
+import com.example.newsappjetpackcompose.events.SavedScreenEvents
+import com.example.newsappjetpackcompose.events.UiEventsSavedScreen
 import com.example.newsappjetpackcompose.uicomponents.NewsCard
 import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 
 @Composable
-fun SearchScreenUI(searchViewModel: SearchScreenViewModel) {
+fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:SnackbarHostState) {
 
     val newsResponse by searchViewModel.searchedNews.observeAsState(NewsResponse())
     val viewModel = viewModel<SearchScreenViewModel>()
-    val savedScreenViewModel:SavedScreenViewModel = hiltViewModel()
-    SearchAppBar(onSearchClicked = {
-        viewModel.searchQuery = it.text
-        viewModel.fetchSearchedNews()
-    })
+    val savedScreenViewModel: SavedScreenViewModel = hiltViewModel()
+    LaunchedEffect(key1 = true ){
+        savedScreenViewModel.uiEvent.collect{
+                event->
+            when(event){
+                is UiEventsSavedScreen.showSnackBar ->{
+                    val result  = snackbarHostState.showSnackbar(
+                        message = event.message,
+                        actionLabel = event.action,
+                        duration = SnackbarDuration.Short
+                        , withDismissAction = true
+                    )
+                    if(result== SnackbarResult.Dismissed){
+                        savedScreenViewModel.onEvent(SavedScreenEvents.onNotClickUndoAdd)
+                    }
+                }
+                is UiEventsSavedScreen.openWebView->{
 
-    var savedScreenViewModel: SavedScreenViewModel = hiltViewModel()
+                }
+            }
+        }
+    }
+    Column {
+
+
+    SearchAppBar(
+        onSearchClicked = {
+            searchViewModel.searchQuery = it.text
+            searchViewModel.fetchSearchedNews()
+        },
+    )
+
+
     LazyColumn(
         modifier = Modifier
-            .padding(60.dp)
+            .padding(top = 10.dp ,start = 10.dp, bottom = 10.dp)
     ) {
         itemsIndexed(
             newsResponse.articles
         ) { index, article ->
-            NewsCard(article,savedScreenViewModel::onEvent)
+            NewsCard(article, savedScreenViewModel::onEvent)
         }
     }
+}
 }
 
 @Composable
@@ -67,6 +103,7 @@ fun SearchAppBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
+            , color = MaterialTheme.colorScheme.primary,
     ) {
         var text by remember { mutableStateOf(TextFieldValue("")) }
         TextField(modifier = Modifier
@@ -77,8 +114,7 @@ fun SearchAppBar(
             },
             placeholder = {
                 Text(
-                    modifier = Modifier
-                    /* .alpha(ContentAlpha.medium)*/,
+                    modifier = Modifier,
                     text = "Search here...",
                     color = Color.White
                 )
@@ -86,8 +122,7 @@ fun SearchAppBar(
             singleLine = true,
             leadingIcon = {
                 IconButton(
-                    modifier = Modifier
-                       /* .alpha(ContentAlpha.medium)*/,
+                    modifier = Modifier,
                     onClick = {}
                 ) {
                     Icon(
@@ -119,7 +154,8 @@ fun SearchAppBar(
                 onSearch = {
                     onSearchClicked(text)
                 }
-            )
+            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.White, containerColor = MaterialTheme.colorScheme.primary, cursorColor =Color.White )
         )
     }
 }
