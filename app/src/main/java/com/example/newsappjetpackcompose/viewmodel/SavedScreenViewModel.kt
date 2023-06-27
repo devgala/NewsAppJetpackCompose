@@ -16,6 +16,7 @@ import javax.inject.Inject
 class SavedScreenViewModel @Inject constructor(private val repository:ArticleRepository) : ViewModel() {
         val articles = repository.getAllArticles()
     var deletedArticle:Article? = null
+    var savedArticle:Article? = null
     private val _uiEvent = Channel<UiEventsSavedScreen>()
     val uiEvent = _uiEvent.receiveAsFlow()
     fun onEvent(event:SavedScreenEvents){
@@ -40,7 +41,14 @@ class SavedScreenViewModel @Inject constructor(private val repository:ArticleRep
             }
             is SavedScreenEvents.onClickAdd->{
                 viewModelScope.launch {
-                    repository.insertArticle(event.article)
+                    sendUIEvent(UiEventsSavedScreen.showSnackBar("Article Saved", action = "Undo"))
+                    savedArticle =event.article
+                }
+            }
+            is SavedScreenEvents.onNotClickUndoAdd->{
+                viewModelScope.launch{
+
+                    savedArticle?.let { repository.insertArticle(it)}
                 }
             }
         }

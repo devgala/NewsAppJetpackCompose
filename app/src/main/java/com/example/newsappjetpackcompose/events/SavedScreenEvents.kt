@@ -7,5 +7,6 @@ sealed class SavedScreenEvents{
     data class onClickDelete(val article: Article):SavedScreenEvents()
     object onClickUndoDelete:SavedScreenEvents()
     data class onClickAdd(val article: Article):SavedScreenEvents()
+    object onNotClickUndoAdd:SavedScreenEvents()
 
 }
