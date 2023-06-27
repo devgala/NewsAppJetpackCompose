@@ -46,6 +46,7 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel) {
         viewModel.fetchSearchedNews()
     })
 
+    var savedScreenViewModel: SavedScreenViewModel = hiltViewModel()
     LazyColumn(
         modifier = Modifier
             .padding(60.dp)

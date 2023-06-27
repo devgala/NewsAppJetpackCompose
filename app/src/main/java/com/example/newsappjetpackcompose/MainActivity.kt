@@ -19,18 +19,20 @@ import com.example.newsappjetpackcompose.ui.theme.NewsAppJetpackComposeTheme
 import com.example.newsappjetpackcompose.view.BottomNavBar
 import com.example.newsappjetpackcompose.view.NewsScreenUI
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
+import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: NewsViewModel by viewModels()
+    private val newsViewModel: NewsViewModel by viewModels()
+    private val searchViewModel: SearchScreenViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             NewsAppJetpackComposeTheme {
-                MainScreen(viewModel = viewModel)
+                MainScreen(newsViewModel = newsViewModel, searchViewModel = searchViewModel)
 
             }
         }
@@ -41,7 +43,7 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(viewModel: NewsViewModel) {
+fun MainScreen(newsViewModel: NewsViewModel, searchViewModel: SearchScreenViewModel) {
     val navController = rememberNavController()
     val navList = listOf(Screens.NewsScreen,Screens.SearchScreen,Screens.SavedScreen)
     val snackbarHostState = remember { SnackbarHostState() }
@@ -54,7 +56,10 @@ fun MainScreen(viewModel: NewsViewModel) {
         //NewsScreenUI(viewModel)
         Surface(modifier = Modifier.fillMaxSize().padding(bottom = it.calculateBottomPadding())) {
 
-            NavConfiguration(navController = navController, viewModel = viewModel, snackbarHostState = snackbarHostState)
+            NavConfiguration(navController = navController,
+                newsViewModel = newsViewModel,
+                searchViewModel = searchViewModel,
+                snackbarHostState = snackbarHostState)
         }
     }
 
