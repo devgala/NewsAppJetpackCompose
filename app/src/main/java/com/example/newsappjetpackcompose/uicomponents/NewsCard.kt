@@ -14,11 +14,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -39,6 +43,7 @@ import java.util.Date
 
 @Composable
 fun NewsCard(article: Article,onEvent:(SavedScreenEvents)->Unit){
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -116,8 +121,11 @@ fun NewsCard(article: Article,onEvent:(SavedScreenEvents)->Unit){
 
                         )
                         inserted.source_name = article.source.name?:"Not Available"
-                        onEvent(SavedScreenEvents.onClickAdd(inserted))}) {
+                        onEvent(SavedScreenEvents.onClickAdd(inserted))
+
+                    }) {
                         Icon(painter = painterResource(id = R.drawable.bookmark_fill0_wght400_grad0_opsz48) , contentDescription ="download", modifier = Modifier.size(25.dp) )
+
                     }
                 }
             }

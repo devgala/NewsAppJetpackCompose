@@ -21,7 +21,7 @@ snackbarHostState: SnackbarHostState
 ){
   NavHost(navController = navController, startDestination = Screens.NewsScreen.route, builder = {
       composable(Screens.NewsScreen.route){
-          NewsScreenUI(newsViewModel = viewModel)
+          NewsScreenUI(newsViewModel = viewModel,snackbarHostState=snackbarHostState)
 
       }
       composable(
@@ -30,7 +30,7 @@ snackbarHostState: SnackbarHostState
           SavedScreenUI(snackbarHostState=snackbarHostState)
       }
       composable(Screens.SearchScreen.route){
-          SearchScreenUI()
+         // SearchScreenUI()
       }
   })
 }

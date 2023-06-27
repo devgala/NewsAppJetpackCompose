@@ -27,10 +27,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.wear.compose.material.ContentAlpha
+//import androidx.wear.compose.material.ContentAlpha
 import com.example.newsappjetpackcompose.NewsResponse
 import com.example.newsappjetpackcompose.uicomponents.NewsCard
+import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 
 @Composable
@@ -38,7 +40,7 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel) {
 
     val newsResponse by searchViewModel.searchedNews.observeAsState(NewsResponse())
     val viewModel = viewModel<SearchScreenViewModel>()
-
+    val savedScreenViewModel:SavedScreenViewModel = hiltViewModel()
     SearchAppBar(onSearchClicked = {
         viewModel.searchQuery = it.text
         viewModel.fetchSearchedNews()
@@ -51,7 +53,7 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel) {
         itemsIndexed(
             newsResponse.articles
         ) { index, article ->
-            NewsCard(article)
+            NewsCard(article,savedScreenViewModel::onEvent)
         }
     }
 }
@@ -75,7 +77,7 @@ fun SearchAppBar(
             placeholder = {
                 Text(
                     modifier = Modifier
-                        .alpha(ContentAlpha.medium),
+                    /* .alpha(ContentAlpha.medium)*/,
                     text = "Search here...",
                     color = Color.White
                 )
@@ -84,7 +86,7 @@ fun SearchAppBar(
             leadingIcon = {
                 IconButton(
                     modifier = Modifier
-                        .alpha(ContentAlpha.medium),
+                       /* .alpha(ContentAlpha.medium)*/,
                     onClick = {}
                 ) {
                     Icon(
