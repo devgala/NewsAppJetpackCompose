@@ -13,6 +13,7 @@ class ArticleRepositoryImpl(
     }
 
     override suspend fun insertArticle(article: Article) {
+
         articleDao.insert(article)
     }
 
