@@ -49,7 +49,7 @@ fun NewsScreenUI(newsViewModel: NewsViewModel,snackbarHostState: SnackbarHostSta
                 is UiEventsSavedScreen.showSnackBar ->{
                     val result  = snackbarHostState.showSnackbar(
                         message = event.message,
-                        actionLabel = event.action,
+                       // actionLabel = event.action,
                         duration = SnackbarDuration.Short
                         , withDismissAction = true
                     )

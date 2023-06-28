@@ -20,4 +20,16 @@ class ArticleRepositoryImpl(
     override suspend fun deleteArticle(article: Article) {
        articleDao.delete(article.id)
     }
+
+    override suspend fun isPresent(articleURL: String) :Boolean{
+        articleDao.isPresent(articleURL).let {
+            url ->
+            return url == articleURL
+        }
+    }
+
+    override suspend fun idFromUrl(articleURL: String) :Int{
+        return  articleDao.idFromUrl(articleURL)
+
+    }
 }

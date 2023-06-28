@@ -32,7 +32,8 @@ import com.example.newsappjetpackcompose.util.getFormattedDate
 fun ArticleItemSaved(
     article: Article,
     onEvent: (SavedScreenEvents)->Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+
 ) {
 
     Card(modifier = Modifier
