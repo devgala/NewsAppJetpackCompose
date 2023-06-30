@@ -13,9 +13,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SavedScreenViewModel @Inject constructor(private val repository:ArticleRepository) : ViewModel() {
+class SavedScreenViewModel @Inject constructor(val repository:ArticleRepository) : ViewModel() {
         val articles = repository.getAllArticles()
     var deletedArticle:Article? = null
+    var savedArticle:Article? = null
     private val _uiEvent = Channel<UiEventsSavedScreen>()
     val uiEvent = _uiEvent.receiveAsFlow()
     fun onEvent(event:SavedScreenEvents){
@@ -26,6 +27,9 @@ class SavedScreenViewModel @Inject constructor(private val repository:ArticleRep
             is SavedScreenEvents.onClickDelete->{
 
                 viewModelScope.launch {
+                    if(event.article.id==0){
+                        event.article.id = repository.idFromUrl(event.article.url)
+                    }
                     deletedArticle = event.article
                     repository.deleteArticle(event.article)
                     sendUIEvent(UiEventsSavedScreen.showSnackBar("Article Deleted",action = "UNDO"))
@@ -36,6 +40,21 @@ class SavedScreenViewModel @Inject constructor(private val repository:ArticleRep
                     viewModelScope.launch {
                         repository.insertArticle(it)
                     }
+                }
+            }
+            is SavedScreenEvents.onClickAdd->{
+                viewModelScope.launch {
+                    //savedArticle = event.article
+                    event.article?.let {
+                        repository.insertArticle(it)
+                    }
+                    sendUIEvent(UiEventsSavedScreen.showSnackBar("Article Saved", action = "Undo"))
+                }
+            }
+            is SavedScreenEvents.onNotClickUndoAdd->{
+                viewModelScope.launch{
+
+                  // savedArticle?.let { repository.insertArticle(it)}
                 }
             }
         }

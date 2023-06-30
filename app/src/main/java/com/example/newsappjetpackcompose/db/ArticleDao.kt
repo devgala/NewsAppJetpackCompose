@@ -17,5 +17,10 @@ interface ArticleDao {
     @Query("DELETE FROM articleTable WHERE id=:id")
     suspend fun delete(id:Int)
 
+    @Query("SELECT URL FROM ARTICLETABLE WHERE URL= :url")
+    suspend fun isPresent(url : String):String
+
+    @Query("SELECT ID FROM ARTICLETABLE WHERE URL = :url")
+    suspend fun idFromUrl(url:String):Int
 
 }
