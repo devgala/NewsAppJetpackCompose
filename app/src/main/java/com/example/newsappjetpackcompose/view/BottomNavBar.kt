@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
-import com.example.newsappjetpackcompose.nav.Screens
+import com.example.newsappjetpackcompose.bottomNav.Screens
 
 @Composable
 fun BottomNavBar(navController: NavHostController,items:List<Screens>) {

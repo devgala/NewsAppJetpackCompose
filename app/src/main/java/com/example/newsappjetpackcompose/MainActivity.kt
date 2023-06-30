@@ -19,11 +19,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.newsappjetpackcompose.nav.NavConfiguration
-import com.example.newsappjetpackcompose.nav.Screens
+import com.example.newsappjetpackcompose.bottomNav.NavConfiguration
+import com.example.newsappjetpackcompose.bottomNav.Screens
 import com.example.newsappjetpackcompose.ui.theme.NewsAppJetpackComposeTheme
 import com.example.newsappjetpackcompose.view.BottomNavBar
-import com.example.newsappjetpackcompose.view.NewsScreenUI
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
