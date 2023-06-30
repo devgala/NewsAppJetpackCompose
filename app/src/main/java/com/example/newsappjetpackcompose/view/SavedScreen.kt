@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.newsappjetpackcompose.events.SavedScreenEvents
 import com.example.newsappjetpackcompose.events.UiEventsSavedScreen
 import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
@@ -28,7 +29,7 @@ import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SavedScreenUI(viewModel: SavedScreenViewModel= hiltViewModel(),snackbarHostState: SnackbarHostState) {
+fun SavedScreenUI(viewModel: SavedScreenViewModel= hiltViewModel(),snackbarHostState: SnackbarHostState, webNavController: NavController) {
     val articles = viewModel.articles.collectAsState(initial = emptyList())
     LaunchedEffect(key1 = true){
         viewModel.uiEvent.collect{
@@ -58,6 +59,7 @@ fun SavedScreenUI(viewModel: SavedScreenViewModel= hiltViewModel(),snackbarHostS
     LazyColumn(modifier = Modifier.fillMaxSize()){
         items(articles.value){
             article-> ArticleItemSaved(article = article,
+            webViewNavController = webNavController,
             onEvent = viewModel::onEvent,
             modifier = Modifier.fillMaxWidth()
                 .clickable {

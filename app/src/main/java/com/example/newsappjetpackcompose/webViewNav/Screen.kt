@@ -1,7 +1,7 @@
 package com.example.newsappjetpackcompose.webViewNav
 
 sealed class Screen(val route: String){
-    object NewsScreenUI: Screen("NewsScreen")
+    object BottomScreenNav: Screen("BottomScreenNav")
     object WebViewScreenUI: Screen("WebViewScreenUI")
 
 //    fun withArgs(vararg args: String): String{

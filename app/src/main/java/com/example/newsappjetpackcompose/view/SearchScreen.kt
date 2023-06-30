@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.newsappjetpackcompose.NewsResponse
 import com.example.newsappjetpackcompose.events.SavedScreenEvents
 import com.example.newsappjetpackcompose.events.UiEventsSavedScreen
@@ -45,7 +46,7 @@ import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 
 @Composable
-fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:SnackbarHostState) {
+fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:SnackbarHostState, webNavController: NavController) {
 
     val newsResponse by searchViewModel.searchedNews.observeAsState(NewsResponse())
     val viewModel = viewModel<SearchScreenViewModel>()
@@ -89,7 +90,7 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:Snac
         itemsIndexed(
             newsResponse.articles
         ) { index, article ->
-            NewsCard(article, savedScreenViewModel::onEvent)
+            NewsCard(article, savedScreenViewModel::onEvent, webNavController = webNavController)
         }
     }
 }

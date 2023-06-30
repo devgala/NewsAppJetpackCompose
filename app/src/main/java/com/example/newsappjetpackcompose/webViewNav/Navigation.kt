@@ -6,16 +6,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.newsappjetpackcompose.view.BottomNavInit
 import com.example.newsappjetpackcompose.view.NewsScreenUI
 import com.example.newsappjetpackcompose.view.WebViewScreenUI
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
+import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 
 @Composable
-fun Navigation(newsViewModel: NewsViewModel){
+fun WebViewNav(newsViewModel: NewsViewModel, searchViewModel: SearchScreenViewModel){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.NewsScreenUI.route){
-        composable(route= Screen.NewsScreenUI.route){
-            NewsScreenUI(newsViewModel = newsViewModel, navController = navController)
+    NavHost(navController = navController, startDestination = Screen.BottomScreenNav.route){
+//        composable(route= Screen.NewsScreenUI.route){
+//            NewsScreenUI(newsViewModel = newsViewModel, navController = navController)
+//        }
+        composable(route = Screen.BottomScreenNav.route){
+            BottomNavInit(newsViewModel = newsViewModel, searchViewModel = searchViewModel, webNavController = navController)
         }
         composable(
             route = "${Screen.WebViewScreenUI.route}/{url}",
