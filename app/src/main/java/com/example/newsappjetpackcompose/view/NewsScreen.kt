@@ -3,8 +3,11 @@ package com.example.newsappjetpackcompose.view
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -18,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -37,12 +41,13 @@ import kotlin.reflect.KProperty
 fun NewsScreenUI(newsViewModel: NewsViewModel,snackbarHostState: SnackbarHostState) {
 
 
-    val newsResponse by  newsViewModel.breakingNews.observeAsState(NewsResponse())
-    val viewModel = viewModel<NewsViewModel>()
+    val newScreenViewModel = viewModel<NewsViewModel>()
+    val state = newScreenViewModel.screenState
+
     var savedScreenViewModel:SavedScreenViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
-        newsViewModel.fetchBreakingNews()
-        Log.d("api check", newsResponse.totalResults.toString())
+//        newsViewModel.fetchBreakingNews()
+//        Log.d("api check", newsResponse.totalResults.toString())
         savedScreenViewModel.uiEvent.collect{
             event->
             when(event){
@@ -63,13 +68,44 @@ fun NewsScreenUI(newsViewModel: NewsViewModel,snackbarHostState: SnackbarHostSta
             }
         }
     }
-    Log.d("api check", newsResponse.articles.toString())
-    LazyColumn{
+   // Log.d("api check", newsResponse.articles.toString())
+    if(state.items==null){
+        Box(modifier = Modifier.fillMaxSize()){
+            Text(text = "No news to display",modifier = Modifier.align(Alignment.Center))
+        }
+    }
 
-        itemsIndexed(
-            newsResponse.articles
-        ){
-            index, article -> NewsCard(article,savedScreenViewModel::onEvent)
+    state.items?.let {
+
+        LazyColumn{
+            itemsIndexed(
+                state.items
+            ){
+                index, item ->
+                if(index>=state.items.size-1 && !state.endReached && !state.isLoading){
+                    newScreenViewModel.loadNextItems()
+                    Log.d("scroll","this")
+                }
+                NewsCard(item,savedScreenViewModel::onEvent)
+            }
+
+//           items(state.items.size){i->
+//               Log.d("scroll","${state.items.size}")
+//               val item = state.items[i]
+//               if(i>=state.items.size-1 && !state.endReached && !state.isLoading){
+//                   newScreenViewModel.loadNextItems()
+//                   Log.d("scroll","this")
+//               }
+//               NewsCard(item,savedScreenViewModel::onEvent)
+//           }
+            if(state.isLoading)
+            item{
+                Box(Modifier.fillMaxWidth()){
+
+                    CircularProgressIndicator(Modifier.align(Alignment.Center).padding(5.dp))
+                }
+            }
+
         }
     }
 
