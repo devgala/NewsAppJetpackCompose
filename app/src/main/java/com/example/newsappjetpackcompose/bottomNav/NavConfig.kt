@@ -1,13 +1,11 @@
-package com.example.newsappjetpackcompose.nav
+package com.example.newsappjetpackcompose.bottomNav
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.Dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.example.newsappjetpackcompose.view.NewsScreenUI
 import com.example.newsappjetpackcompose.view.SavedScreenUI
 import com.example.newsappjetpackcompose.view.SearchScreenUI
@@ -20,19 +18,20 @@ fun NavConfiguration(
     navController: NavHostController,
     newsViewModel: NewsViewModel,
     searchViewModel: SearchScreenViewModel,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    webNavController: NavController
 ){
   NavHost(navController = navController, startDestination = Screens.NewsScreen.route, builder = {
       composable(Screens.NewsScreen.route){
-          NewsScreenUI(newsViewModel = newsViewModel, snackbarHostState=snackbarHostState)
+          NewsScreenUI(newsViewModel = newsViewModel, snackbarHostState=snackbarHostState, webNavController)
       }
       composable(
           route = Screens.SavedScreen.route,
       ){
-          SavedScreenUI(snackbarHostState=snackbarHostState)
+          SavedScreenUI(snackbarHostState=snackbarHostState, webNavController = webNavController)
       }
       composable(Screens.SearchScreen.route){
-          SearchScreenUI(searchViewModel = searchViewModel,snackbarHostState=snackbarHostState)
+          SearchScreenUI(searchViewModel = searchViewModel,snackbarHostState=snackbarHostState, webNavController = webNavController)
 
       }
   })

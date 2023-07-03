@@ -1,6 +1,7 @@
 package com.example.newsappjetpackcompose
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,15 +18,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.newsappjetpackcompose.nav.NavConfiguration
-import com.example.newsappjetpackcompose.nav.Screens
+import com.example.newsappjetpackcompose.bottomNav.NavConfiguration
+import com.example.newsappjetpackcompose.bottomNav.Screens
 import com.example.newsappjetpackcompose.ui.theme.NewsAppJetpackComposeTheme
 import com.example.newsappjetpackcompose.view.BottomNavBar
-import com.example.newsappjetpackcompose.view.NewsScreenUI
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
+import com.example.newsappjetpackcompose.webViewNav.WebViewNav
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,67 +38,26 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        installSplashScreen().apply {
+//            setKeepVisibleCondition{
+//               // newsViewModel.isLoading.value
+//            }
+            setKeepOnScreenCondition{
+                newsViewModel.isLoading.value
+            }
+        }
         setContent {
             NewsAppJetpackComposeTheme {
-                MainScreen(newsViewModel = newsViewModel, searchViewModel = searchViewModel)
-
+//                MainScreen(newsViewModel = newsViewModel, searchViewModel = searchViewModel)
+                WebViewNav(newsViewModel = newsViewModel, searchViewModel = searchViewModel)
             }
         }
 
     }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MainScreen(newsViewModel: NewsViewModel, searchViewModel: SearchScreenViewModel) {
-    val navController = rememberNavController()
-    val navList = listOf(Screens.NewsScreen,Screens.SearchScreen,Screens.SavedScreen)
-    val snackbarHostState = remember { SnackbarHostState() }
-    var appBarTitle =rememberSaveable{
-        mutableStateOf("News App")
-    }
-    var topBarState = rememberSaveable {
-        mutableStateOf(true)
-    }
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    when(navBackStackEntry?.destination?.route){
-        Screens.SearchScreen.route->{
-            topBarState.value = false
-        }
-        Screens.SavedScreen.route->{
-            topBarState.value= true
-            appBarTitle.value = "Saved News"
-        }
-        Screens.NewsScreen.route->{
-            topBarState.value= true
-            appBarTitle.value = "News App"
-        }
-    }
-    Scaffold(
-        bottomBar = { BottomNavBar(navController = navController, items = navList)},
-        snackbarHost = {SnackbarHost(snackbarHostState)},
-        topBar = {
-            AnimatedVisibility(visible = topBarState.value) {
-                SmallTopAppBar(title = {Text(text = appBarTitle.value)}, colors=TopAppBarDefaults.smallTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary, titleContentColor = Color.White))
 
-            }
-        }
-    ) {
-        Surface(modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = it.calculateBottomPadding(), top = it.calculateTopPadding())) {
-
-            NavConfiguration(navController = navController,
-                newsViewModel = newsViewModel,
-                searchViewModel = searchViewModel,
-                snackbarHostState = snackbarHostState
-
-            )
-        }
-    }
-
-}
 
 
 
