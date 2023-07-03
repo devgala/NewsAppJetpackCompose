@@ -1,6 +1,7 @@
 package com.example.newsappjetpackcompose
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -37,8 +38,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         installSplashScreen().apply {
-            setKeepVisibleCondition{
+//            setKeepVisibleCondition{
+//               // newsViewModel.isLoading.value
+//            }
+            setKeepOnScreenCondition{
                 newsViewModel.isLoading.value
             }
         }

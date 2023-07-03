@@ -43,6 +43,8 @@ class NewsViewModel : ViewModel() {
 //    }
     val repository = paginatonRepository()
     var screenState by  mutableStateOf(NewsScreenState())
+    val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
     private val paginator = DefaultPaginator(
         initialKey = screenState.page,
         onLoadUpdated = {
@@ -74,11 +76,12 @@ class NewsViewModel : ViewModel() {
      fun loadNextItems(){
         viewModelScope.launch {
             paginator.loadNextArticles()
+            _isLoading.value = false
         }
     }
-    init {
-        loadNextItems()
-    }
+//    init {
+//        loadNextItems()
+//    }
 }
 
 data class NewsScreenState(
