@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.newsappjetpackcompose.NewsResponse
 import com.example.newsappjetpackcompose.events.SavedScreenEvents
 import com.example.newsappjetpackcompose.events.UiEventsSavedScreen
@@ -34,11 +35,11 @@ import kotlin.reflect.KProperty
 
 
 @Composable
-fun NewsScreenUI(newsViewModel: NewsViewModel,snackbarHostState: SnackbarHostState) {
+fun NewsScreenUI(newsViewModel: NewsViewModel,snackbarHostState: SnackbarHostState, webNavController: NavController) {
 
 
     val newsResponse by  newsViewModel.breakingNews.observeAsState(NewsResponse())
-    val viewModel = viewModel<NewsViewModel>()
+//    val viewModel = viewModel<NewsViewModel>()
     var savedScreenViewModel:SavedScreenViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
         newsViewModel.fetchBreakingNews()
@@ -69,7 +70,7 @@ fun NewsScreenUI(newsViewModel: NewsViewModel,snackbarHostState: SnackbarHostSta
         itemsIndexed(
             newsResponse.articles
         ){
-            index, article -> NewsCard(article,savedScreenViewModel::onEvent)
+            index, article -> NewsCard(article,savedScreenViewModel::onEvent, webNavController = webNavController)
         }
     }
 

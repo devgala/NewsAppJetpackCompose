@@ -12,12 +12,16 @@ import com.example.newsappjetpackcompose.model.Article
 import com.example.newsappjetpackcompose.repository.ArticleRepository
 import com.example.newsappjetpackcompose.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
 
 class NewsViewModel  : ViewModel() {
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
     private val repository = NewsRepository()
     private val _breakingNews = MutableLiveData<NewsResponse>()
     val breakingNews: LiveData<NewsResponse> = _breakingNews
@@ -29,6 +33,7 @@ class NewsViewModel  : ViewModel() {
             try{
                 val newsResponse = repository.getBreakingNews("in", breakingNewsPage)
                 _breakingNews.value=newsResponse
+                _isLoading.value=false
             } catch (e: Exception){
                 Log.d("Api Call", e.stackTrace.toString())
             }

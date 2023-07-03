@@ -1,4 +1,4 @@
-package com.example.newsappjetpackcompose.nav
+package com.example.newsappjetpackcompose.bottomNav
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
