@@ -17,6 +17,8 @@ import com.example.newsappjetpackcompose.pagination.paginatonRepository
 import com.example.newsappjetpackcompose.repository.ArticleRepository
 import com.example.newsappjetpackcompose.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
