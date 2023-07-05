@@ -31,6 +31,8 @@ The project leverages the following libraries and technologies:
 - [Room](https://developer.android.com/jetpack/androidx/releases/room) - Persistence library for local data storage.
 - [Glide](https://github.com/bumptech/glide) - Image loading library for displaying news article images.
 - [Hilt](https://dagger.dev/hilt/gradle-setup) - Dependency injection framework.
+- [Navigation](https://developer.android.com/jetpack/compose/navigation) - Navigation Library to navigate between multiple screens within the same activity.
+
 
 ## Getting Started
 
