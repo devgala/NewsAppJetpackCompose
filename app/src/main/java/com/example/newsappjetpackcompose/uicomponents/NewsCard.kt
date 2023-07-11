@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -65,13 +66,14 @@ fun NewsCard(article: Article,onEvent:(SavedScreenEvents)->Unit,savedScreenViewM
            isSaved.value = savedScreenViewModel.repository.isPresent(article.url)
        }
    }
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable {
+            .clickable{
                 Log.d("fromNewsCard", article.url)
                 webNavController.navigate(
                     Screen.WebViewScreenUI.route + "/" + URLEncoder.encode(
@@ -81,7 +83,9 @@ fun NewsCard(article: Article,onEvent:(SavedScreenEvents)->Unit,savedScreenViewM
                 )
             }
     ){
-        Card(modifier = Modifier.wrapContentHeight().fillMaxWidth(), elevation = CardDefaults.cardElevation(defaultElevation = 7.dp)) {
+        Card(modifier = Modifier
+            .wrapContentHeight()
+            .fillMaxWidth(), elevation = CardDefaults.cardElevation(defaultElevation = 7.dp)) {
             Row (
                 modifier = Modifier
                     .fillMaxWidth()

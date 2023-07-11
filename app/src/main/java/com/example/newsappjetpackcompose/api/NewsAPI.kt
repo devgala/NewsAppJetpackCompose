@@ -13,7 +13,9 @@ interface NewsAPI {
         @retrofit2.http.Query("page")
         pageNumber: Int = 1,
         @retrofit2.http.Query("apiKey")
-        apiKey: String = API_KEY
+        apiKey: String = API_KEY,
+        @retrofit2.http.Query("pageSize")
+        pageSize:Int = 10
     ): NewsResponse
 
     @GET("v2/everything")
@@ -23,6 +25,8 @@ interface NewsAPI {
         @retrofit2.http.Query("page")
         pageNumber: Int = 1,
         @retrofit2.http.Query("apiKey")
-        apiKey: String = API_KEY
+        apiKey: String = API_KEY,
+        @retrofit2.http.Query("pageSize")
+        pageSize:Int = 10
     ): NewsResponse
 }

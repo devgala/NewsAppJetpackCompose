@@ -39,75 +39,70 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlin.reflect.KProperty
 
 
-
 @Composable
-fun NewsScreenUI(newsViewModel: NewsViewModel,snackbarHostState: SnackbarHostState,webNavController:NavController) {
+fun NewsScreenUI(
+    newsViewModel: NewsViewModel,
+    snackbarHostState: SnackbarHostState,
+    webNavController: NavController
+) {
 
 
     val newScreenViewModel = viewModel<NewsViewModel>()
     val state = newsViewModel.screenState
-    var savedScreenViewModel:SavedScreenViewModel = hiltViewModel()
+    var savedScreenViewModel: SavedScreenViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
         newsViewModel.loadNextItems()
 
 //        newsViewModel.fetchBreakingNews()
 //        Log.d("api check", newsResponse.totalResults.toString())
-        savedScreenViewModel.uiEvent.collect{
-            event->
-            when(event){
-                is UiEventsSavedScreen.showSnackBar ->{
-                    val result  = snackbarHostState.showSnackbar(
+        savedScreenViewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEventsSavedScreen.showSnackBar -> {
+                    val result = snackbarHostState.showSnackbar(
                         message = event.message,
-                       // actionLabel = event.action,
-                        duration = SnackbarDuration.Short
-                        , withDismissAction = true
+                        // actionLabel = event.action,
+                        duration = SnackbarDuration.Short, withDismissAction = true
                     )
-                    if(result==SnackbarResult.Dismissed){
+                    if (result == SnackbarResult.Dismissed) {
                         savedScreenViewModel.onEvent(SavedScreenEvents.onNotClickUndoAdd)
                     }
                 }
-                is UiEventsSavedScreen.openWebView->{
+
+                is UiEventsSavedScreen.openWebView -> {
 
                 }
             }
         }
     }
-   // Log.d("api check", newsResponse.articles.toString())
-    if(state.items==null){
-        Box(modifier = Modifier.fillMaxSize()){
-            Text(text = "No news to display",modifier = Modifier.align(Alignment.Center))
+    // Log.d("api check", newsResponse.articles.toString())
+    if (state.items == null) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Text(text = "No news to display", modifier = Modifier.align(Alignment.Center))
         }
     }
 
     state.items?.let {
 
-        LazyColumn{
+        LazyColumn {
             itemsIndexed(
                 state.items
-            ){
-                index, item ->
-                if(index>=state.items.size-1 && !state.endReached && !state.isLoading){
+            ) { index, item ->
+                if (index >= state.items.size - 1 && !state.endReached && !state.isLoading) {
                     newsViewModel.loadNextItems()
-                    Log.d("scroll","this")
+                    Log.d("scroll", "this")
                 }
-                NewsCard(item,savedScreenViewModel::onEvent,webNavController = webNavController)
+                NewsCard(item, savedScreenViewModel::onEvent, webNavController = webNavController)
             }
 
-//           items(state.items.size){i->
-//               Log.d("scroll","${state.items.size}")
-//               val item = state.items[i]
-//               if(i>=state.items.size-1 && !state.endReached && !state.isLoading){
-//                   newScreenViewModel.loadNextItems()
-//                   Log.d("scroll","this")
-//               }
-//               NewsCard(item,savedScreenViewModel::onEvent)
-//           }
-            if(state.isLoading){
+            if (state.isLoading) {
 
-                item{
-                    Box(Modifier.fillMaxWidth()){
+                item {
+                    Box(Modifier.fillMaxWidth()) {
 
-                        CircularProgressIndicator(Modifier.align(Alignment.Center).padding(5.dp))
+                        CircularProgressIndicator(
+                            Modifier
+                                .align(Alignment.Center)
+                                .padding(5.dp))
                     }
                 }
             }

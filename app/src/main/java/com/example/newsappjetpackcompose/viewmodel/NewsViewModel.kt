@@ -25,22 +25,6 @@ import javax.inject.Inject
 
 
 class NewsViewModel : ViewModel() {
-    //    private val repository = NewsRepository()
-//    private val _breakingNews = MutableLiveData<NewsResponse>()
-//    val breakingNews: LiveData<NewsResponse> = _breakingNews
-//    var breakingNewsPage = 1
-//
-//
-//    fun fetchBreakingNews(){
-//        viewModelScope.launch {
-//            try{
-//                val newsResponse = repository.getBreakingNews("in", breakingNewsPage)
-//                _breakingNews.value=newsResponse
-//            } catch (e: Exception){
-//                Log.d("Api Call", e.stackTrace.toString())
-//            }
-//        }
-//    }
     val repository = paginatonRepository()
     var screenState by  mutableStateOf(NewsScreenState())
     val _isLoading = MutableStateFlow(true)
@@ -88,6 +72,6 @@ data class NewsScreenState(
     val isLoading: Boolean = false,
     val items: List<com.example.newsappjetpackcompose.Article>? = emptyList(),
     val error: String? = null,
-    val page: Int = 0,
+    val page: Int = 1,
     val endReached:Boolean = false
 )
