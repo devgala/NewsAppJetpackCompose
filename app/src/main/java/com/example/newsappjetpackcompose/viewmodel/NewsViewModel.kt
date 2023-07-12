@@ -12,10 +12,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.newsappjetpackcompose.NewsResponse
 import com.example.newsappjetpackcompose.events.NewsScreenEvents
 import com.example.newsappjetpackcompose.model.Article
+import com.example.newsappjetpackcompose.model.weatherModel.WeatherResponse
 import com.example.newsappjetpackcompose.pagination.DefaultPaginator
 import com.example.newsappjetpackcompose.pagination.paginatonRepository
 import com.example.newsappjetpackcompose.repository.ArticleRepository
 import com.example.newsappjetpackcompose.repository.NewsRepository
+import com.example.newsappjetpackcompose.repository.WeatherRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,9 +28,12 @@ import javax.inject.Inject
 
 class NewsViewModel : ViewModel() {
     val repository = paginatonRepository()
+    val weatherRepository = WeatherRepositoryImpl()
     var screenState by  mutableStateOf(NewsScreenState())
     val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
+    private val _weatherResponse = MutableLiveData<WeatherResponse>()
+    val weatherResponse:LiveData<WeatherResponse> = _weatherResponse
     private val paginator = DefaultPaginator(
         initialKey = screenState.page,
         onLoadUpdated = {
@@ -56,7 +61,12 @@ class NewsViewModel : ViewModel() {
         }
 
         )
-
+     fun loadWeather(location:String= "Mumbai"){
+        viewModelScope.launch {
+           // weatherResponse.value = weatherRepository.getWeatherData(1.0,1.0);
+            _weatherResponse.value = weatherRepository.getWeatherData(location);
+        }
+    }
      fun loadNextItems(){
         viewModelScope.launch {
             paginator.loadNextArticles()
