@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.newsappjetpackcompose.signIn.AuthRepository
 import com.example.newsappjetpackcompose.states.SignInState
 import com.example.newsappjetpackcompose.util.AuthResource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val repository: AuthRepository
 ): ViewModel() {
@@ -18,10 +20,10 @@ class SignUpViewModel @Inject constructor(
     val signUpState = _signUpState.receiveAsFlow()
 
     fun registerUser(email: String, password: String) = viewModelScope.launch {
-        repository.loginUser(email, password).collect { result ->
+        repository.registerUser(email, password).collect { result ->
             when (result) {
                 is AuthResource.Success -> {
-                    _signUpState.send(SignInState(isSuccess = "Sign In Success"))
+                    _signUpState.send(SignInState(isSuccess = "Sign Up Success"))
                 }
 
                 is AuthResource.Loading -> {

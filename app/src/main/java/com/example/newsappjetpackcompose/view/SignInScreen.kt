@@ -3,6 +3,7 @@ package com.example.newsappjetpackcompose.view
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -25,10 +26,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.newsappjetpackcompose.R
 import com.example.newsappjetpackcompose.ui.theme.RegularFont
 import com.example.newsappjetpackcompose.ui.theme.lightBlue
 import com.example.newsappjetpackcompose.viewmodel.SignInViewModel
+import com.example.newsappjetpackcompose.webViewNav.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -37,6 +40,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen(
+    navcontroller: NavController,
     viewModel: SignInViewModel = hiltViewModel()
 ) {
 
@@ -68,10 +72,18 @@ fun SignInScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(start = 30.dp, end = 30.dp),
-        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Enter your credentials to register",
+            modifier = Modifier.padding(bottom = 10.dp),
+            text = "Login",
+            fontWeight = FontWeight.Bold,
+            fontSize = 35.sp,
+            fontFamily = RegularFont,
+        )
+        Text(
+            text = "Enter your credentials to login",
             fontWeight = FontWeight.Medium,
             fontSize = 15.sp,
             color = Color.Gray,
@@ -133,6 +145,10 @@ fun SignInScreen(
         }
         Text(
             text = "New User? Sign Up ",
+            Modifier
+                .clickable {
+                    navcontroller.navigate(Screen.SignUpScreen.route)
+                           },
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             fontFamily = RegularFont

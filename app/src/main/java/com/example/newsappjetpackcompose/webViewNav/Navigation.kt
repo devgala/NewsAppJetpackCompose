@@ -40,7 +40,7 @@ fun WebViewNav(
 //            NewsScreenUI(newsViewModel = newsViewModel, navController = navController)
 //        }
         composable(route = Screen.SignInScreen.route){
-            SignInScreen()
+            SignInScreen(navController)
         }
         composable(route = Screen.SignUpScreen.route){
             SignUpScreen(navController)

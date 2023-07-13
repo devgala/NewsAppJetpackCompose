@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.newsappjetpackcompose.signIn.AuthRepository
 import com.example.newsappjetpackcompose.states.SignInState
 import com.example.newsappjetpackcompose.util.AuthResource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class SignInViewModel @Inject constructor(
     private val repository: AuthRepository
 ): ViewModel() {
