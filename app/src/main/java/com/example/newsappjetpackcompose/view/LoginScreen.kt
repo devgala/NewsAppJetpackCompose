@@ -1,12 +1,9 @@
 package com.example.newsappjetpackcompose.view
 
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -30,18 +27,14 @@ import androidx.navigation.NavController
 import com.example.newsappjetpackcompose.R
 import com.example.newsappjetpackcompose.ui.theme.RegularFont
 import com.example.newsappjetpackcompose.ui.theme.lightBlue
-import com.example.newsappjetpackcompose.viewmodel.SignInViewModel
+import com.example.newsappjetpackcompose.viewmodel.LoginViewModel
 import com.example.newsappjetpackcompose.webViewNav.Screen
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen(
     navcontroller: NavController,
-    viewModel: SignInViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
 
 //    val googleSignInState = viewModel.googleState.value
@@ -66,7 +59,7 @@ fun SignInScreen(
     var password by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val state = viewModel.signInState.collectAsState(initial = null)
+    val state = viewModel.loginState.collectAsState(initial = null)
 
     Column(
         modifier = Modifier
@@ -98,9 +91,13 @@ fun SignInScreen(
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = lightBlue,
                 cursorColor = Color.Black,
-                disabledLabelColor = lightBlue, unfocusedIndicatorColor = Color.Transparent,
+                disabledLabelColor = lightBlue,
+                unfocusedIndicatorColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent
-            ), shape = RoundedCornerShape(8.dp), singleLine = true, placeholder = {
+            ),
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+            placeholder = {
                 Text(text = "Email")
             }
         )
@@ -114,9 +111,13 @@ fun SignInScreen(
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = lightBlue,
                 cursorColor = Color.Black,
-                disabledLabelColor = lightBlue, unfocusedIndicatorColor = Color.Transparent,
+                disabledLabelColor = lightBlue,
+                unfocusedIndicatorColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent
-            ), shape = RoundedCornerShape(8.dp), singleLine = true, placeholder = {
+            ),
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+            placeholder = {
                 Text(text = "Password")
             }
         )
@@ -129,15 +130,27 @@ fun SignInScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp, start = 30.dp, end = 30.dp),
+                .padding(
+                    top = 20.dp,
+                    start = 30.dp,
+                    end = 30.dp
+                ),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Black, contentColor = Color.White
+                containerColor = Color.Black,
+                contentColor = Color.White
             ),
             shape = RoundedCornerShape(15.dp)
         ) {
-            Text(text = "Sign In", color = Color.White, modifier = Modifier.padding(7.dp))
+            Text(
+                text = "Login",
+                color = Color.White,
+                modifier = Modifier.padding(7.dp)
+            )
         }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
             if (state.value?.isLoading == true) {
                 CircularProgressIndicator()
             }
@@ -146,6 +159,7 @@ fun SignInScreen(
         Text(
             text = "New User? Sign Up ",
             Modifier
+                .padding(15.dp)
                 .clickable {
                     navcontroller.navigate(Screen.SignUpScreen.route)
                            },
@@ -153,7 +167,12 @@ fun SignInScreen(
             color = Color.Black,
             fontFamily = RegularFont
         )
-        Text(text = "or connect with", fontWeight = FontWeight.Medium, color = Color.Gray)
+        Text(
+            modifier = Modifier
+                .padding(top = 40.dp),
+            text = "or connect with",
+            fontWeight = FontWeight.Medium,
+            color = Color.Gray)
         Row(
             modifier = Modifier
                 .fillMaxWidth()

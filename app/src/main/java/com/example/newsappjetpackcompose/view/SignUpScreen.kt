@@ -59,7 +59,10 @@ fun SignUpScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 30.dp, end = 30.dp),
+            .padding(
+                start = 30.dp,
+                end = 30.dp
+            ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -73,7 +76,8 @@ fun SignUpScreen(
         Text(
             text = "Enter your credential's to register",
             fontWeight = FontWeight.Medium,
-            fontSize = 15.sp, color = Color.Gray,
+            fontSize = 15.sp,
+            color = Color.Gray,
             fontFamily = RegularFont,
 
             )
@@ -89,7 +93,6 @@ fun SignUpScreen(
             ),
             onValueChange = {
                 email = it
-
             },
             shape = RoundedCornerShape(8.dp),
             singleLine = true,
@@ -126,7 +129,11 @@ fun SignUpScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp, start = 30.dp, end = 30.dp),
+                .padding(
+                    top = 20.dp,
+                    start = 30.dp,
+                    end = 30.dp
+                ),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Black,
                 contentColor = Color.White
@@ -152,29 +159,32 @@ fun SignUpScreen(
             modifier = Modifier
                 .padding(15.dp)
                 .clickable {
-                    navController.navigate(Screen.SignInScreen.route)
+                    navController.navigate(Screen.LoginScreen.route)
                 },
-            text = "Already Have an account? sign In",
-            fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = RegularFont
+            text = "Already Have an account? Login",
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            fontFamily = RegularFont
         )
         Text(
             modifier = Modifier
-                .padding(
-                    top = 40.dp,
-                ),
+                .padding(top = 40.dp),
             text = "Or connect with",
-            fontWeight = FontWeight.Medium, color = Color.Gray
+            fontWeight = FontWeight.Medium,
+            color = Color.Gray
         )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp), horizontalArrangement = Arrangement.Center
+                .padding(top = 10.dp),
+            horizontalArrangement = Arrangement.Center
         ) {
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(
                     modifier = Modifier.size(50.dp),
                     painter = painterResource(id = R.drawable.ic_google),
-                    contentDescription = "Google Icon", tint = Color.Unspecified
+                    contentDescription = "Google Icon",
+                    tint = Color.Unspecified
                 )
             }
         }
