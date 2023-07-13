@@ -27,8 +27,10 @@ import com.example.newsappjetpackcompose.ui.theme.NewsAppJetpackComposeTheme
 import com.example.newsappjetpackcompose.view.BottomNavBar
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
+import com.example.newsappjetpackcompose.viewmodel.SignInViewModel
 import com.example.newsappjetpackcompose.webViewNav.WebViewNav
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ActivityContext
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -50,7 +52,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             NewsAppJetpackComposeTheme {
 //                MainScreen(newsViewModel = newsViewModel, searchViewModel = searchViewModel)
-                WebViewNav(newsViewModel = newsViewModel, searchViewModel = searchViewModel)
+                WebViewNav(
+                    newsViewModel = newsViewModel,
+                    searchViewModel = searchViewModel
+                )
             }
         }
 
