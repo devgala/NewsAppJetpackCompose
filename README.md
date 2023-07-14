@@ -45,8 +45,10 @@ To get started with the project, follow these steps:
    ```
 
 2. Open the project in Android Studio.
+   
+3. Add your API key for [NewsAPI](https://newsapi.org/) and [WeatherAPI](https://www.weatherapi.com/) in the util/Constants.kt file.  
 
-3. Build and run the app on an emulator or physical device.
+4. Build and run the app on an emulator or physical device.
 
 ## Contributors
 -[Priyank Sethiya](https://github.com/Priyank-Shethia3)
