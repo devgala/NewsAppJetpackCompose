@@ -26,7 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.newsappjetpackcompose.PreferencesManager
 import com.example.newsappjetpackcompose.R
+import com.example.newsappjetpackcompose.model.UserData
 import com.example.newsappjetpackcompose.ui.theme.RegularFont
 import com.example.newsappjetpackcompose.ui.theme.lightBlue
 import com.example.newsappjetpackcompose.util.Constants.Companion.SERVER_CLIENT
@@ -35,7 +37,11 @@ import com.example.newsappjetpackcompose.webViewNav.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 @Composable
@@ -43,6 +49,14 @@ fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+
+    val context = LocalContext.current
+    val preferencesManager = remember { PreferencesManager(context) }
+    val spName = remember { mutableStateOf(preferencesManager.getData("name","")) }
+    val spLanguage = remember { mutableStateOf(preferencesManager.getData("language","")) }
+    val spCountry = remember { mutableStateOf(preferencesManager.getData("country","")) }
+    val spEmail = remember { mutableStateOf(preferencesManager.getData("email","")) }
+    val spPassword = remember { mutableStateOf(preferencesManager.getData("password","")) }
 
     viewModel.doneInit.value = true
 
@@ -64,7 +78,6 @@ fun LoginScreen(
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
     val state = viewModel.loginState.collectAsState(initial = null)
 
     Column(
@@ -209,6 +222,28 @@ fun LoginScreen(
                     if (state.value?.isSuccess?.isNotEmpty() == true) {
                         val success = state.value?.isSuccess
                         Toast.makeText(context, "$success", Toast.LENGTH_LONG).show()
+
+                        Firebase.firestore.collection("users")
+                            .whereEqualTo("userID",FirebaseAuth.getInstance().uid)
+                            .get()
+                            .addOnSuccessListener { documents ->
+                                for (document in documents) {
+                                    val user = document.toObject<UserData>()
+
+                                    preferencesManager.saveData("name", user.name)
+                                    spName.value = user.name
+                                    preferencesManager.saveData("language", user.language)
+                                    spLanguage.value = user.language
+                                    preferencesManager.saveData("country", user.country)
+                                    spCountry.value = user.country
+                                    preferencesManager.saveData("email", user.email)
+                                    spEmail.value = user.email
+                                    preferencesManager.saveData("password", user.password)
+                                    spPassword.value = user.password
+                                }
+                            }
+
+                        navController.navigate(Screen.BottomScreenNav.route)
                     }
                 }
             }

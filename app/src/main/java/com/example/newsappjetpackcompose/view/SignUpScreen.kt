@@ -50,6 +50,7 @@ import com.example.newsappjetpackcompose.webViewNav.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -83,8 +84,8 @@ fun SignUpScreen(
     var country by rememberSaveable { mutableStateOf("") }
     var language by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
     val state = viewModel.signUpState.collectAsState(initial = null)
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -219,32 +220,6 @@ fun SignUpScreen(
                 scope.launch {
                     viewModel.registerUser(email, password)
                 }
-                if (
-                    name.isNotEmpty() &&
-                    country.isNotEmpty() &&
-                    language.isNotEmpty() &&
-                    email.isNotEmpty() &&
-                    password.isNotEmpty()
-                ) {
-                    val user = hashMapOf(
-                        "name" to name,
-                        "country" to country,
-                        "language" to language,
-                        "email" to email,
-                        "password" to password
-                    )
-
-                    db.collection("users")
-                        .add(user)
-                        .addOnSuccessListener { documentReference ->
-                            Log.d("fireStore entry created", "User added with id: ${documentReference.id}")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.d("fireStore error", e.toString())
-                        }
-                } else {
-                    Toast.makeText(context, "Please enter all information", Toast.LENGTH_LONG).show()
-                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -321,6 +296,27 @@ fun SignUpScreen(
                     if (state.value?.isSuccess?.isNotEmpty() == true) {
                         val success = state.value?.isSuccess
                         Toast.makeText(context, "$success", Toast.LENGTH_LONG).show()
+
+                        val uid = FirebaseAuth.getInstance().uid
+                        val user = hashMapOf(
+                            "userID" to uid,
+                            "name" to name,
+                            "country" to country,
+                            "language" to language,
+                            "email" to email,
+                            "password" to password
+                        )
+
+                        db.collection("users")
+                            .add(user)
+                            .addOnSuccessListener { documentReference ->
+                                Log.d("fireStore entry created", "User added with id: ${documentReference.id}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.d("fireStore error", e.toString())
+                            }
+
+                        navController.navigate(Screen.LoginScreen.route)
                     }
                 }
             }
@@ -336,6 +332,7 @@ fun SignUpScreen(
                 scope.launch {
                     if (googleSignInState.success != null) {
                         Toast.makeText(context, "Sign In Success", Toast.LENGTH_LONG).show()
+                        navController.navigate(Screen.BottomScreenNav.route)
                     }
                 }
             }
