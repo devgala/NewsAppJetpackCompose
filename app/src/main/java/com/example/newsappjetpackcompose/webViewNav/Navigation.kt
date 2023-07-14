@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.newsappjetpackcompose.view.BottomNavInit
 import com.example.newsappjetpackcompose.view.NewsScreenUI
+import com.example.newsappjetpackcompose.view.ProfileScreen
 import com.example.newsappjetpackcompose.view.WebViewScreenUI
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
@@ -16,9 +17,6 @@ import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 fun WebViewNav(newsViewModel: NewsViewModel, searchViewModel: SearchScreenViewModel){
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.BottomScreenNav.route){
-//        composable(route= Screen.NewsScreenUI.route){
-//            NewsScreenUI(newsViewModel = newsViewModel, navController = navController)
-//        }
         composable(route = Screen.BottomScreenNav.route){
             BottomNavInit(newsViewModel = newsViewModel, searchViewModel = searchViewModel, webNavController = navController)
         }
@@ -32,8 +30,8 @@ fun WebViewNav(newsViewModel: NewsViewModel, searchViewModel: SearchScreenViewMo
         )){entry ->
             entry.arguments?.getString("url")?.let { WebViewScreenUI(url = it) }
         }
-//        composable(route=Screen.WebViewScreen.route){
-//            WebViewScreenUI(url = "https://www.google.com")
-//        }
+    composable(route = Screen.ProfileScreen.route){
+        ProfileScreen()
+    }
     }
 }
