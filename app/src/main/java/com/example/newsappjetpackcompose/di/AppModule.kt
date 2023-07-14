@@ -5,8 +5,8 @@ import androidx.room.Room
 import com.example.newsappjetpackcompose.db.ArticleDatabase
 import com.example.newsappjetpackcompose.repository.ArticleRepository
 import com.example.newsappjetpackcompose.repository.ArticleRepositoryImpl
-import com.example.newsappjetpackcompose.signIn.AuthRepository
-import com.example.newsappjetpackcompose.signIn.AuthRepositoryImpl
+import com.example.newsappjetpackcompose.repository.AuthRepository
+import com.example.newsappjetpackcompose.repository.AuthRepositoryImpl
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -39,7 +39,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepoImpl(firebaseAuth: FirebaseAuth):AuthRepository{
+    fun provideAuthRepoImpl(firebaseAuth: FirebaseAuth): AuthRepository {
         return AuthRepositoryImpl(firebaseAuth)
     }
 }

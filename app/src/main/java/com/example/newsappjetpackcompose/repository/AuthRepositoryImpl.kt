@@ -1,4 +1,4 @@
-package com.example.newsappjetpackcompose.signIn
+package com.example.newsappjetpackcompose.repository
 
 
 import com.example.newsappjetpackcompose.util.AuthResource

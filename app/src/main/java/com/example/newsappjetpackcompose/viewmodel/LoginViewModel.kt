@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.newsappjetpackcompose.signIn.AuthRepository
+import com.example.newsappjetpackcompose.repository.AuthRepository
 import com.example.newsappjetpackcompose.states.GoogleSignInState
 import com.example.newsappjetpackcompose.states.SignInState
 import com.example.newsappjetpackcompose.util.AuthResource

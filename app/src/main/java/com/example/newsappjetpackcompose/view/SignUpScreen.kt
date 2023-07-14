@@ -1,5 +1,6 @@
 package com.example.newsappjetpackcompose.view
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -50,6 +51,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 @Composable
@@ -57,6 +60,8 @@ fun SignUpScreen(
     navController: NavController,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
+
+    val db = Firebase.firestore
 
     val googleSignInState = viewModel.googleState.value
 
@@ -74,6 +79,9 @@ fun SignUpScreen(
 
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("") }
+    var country by rememberSaveable { mutableStateOf("") }
+    var language by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val state = viewModel.signUpState.collectAsState(initial = null)
@@ -89,20 +97,83 @@ fun SignUpScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            modifier = Modifier.padding(bottom = 10.dp),
+            modifier = Modifier.padding(bottom = 5.dp),
             text = "Create Account",
             fontWeight = FontWeight.Bold,
             fontSize = 35.sp,
             fontFamily = RegularFont,
         )
         Text(
-            text = "Enter your credential's to register",
+            text = "Enter your credentials to register",
             fontWeight = FontWeight.Medium,
             fontSize = 15.sp,
             color = Color.Gray,
             fontFamily = RegularFont,
 
             )
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = name,
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = lightBlue,
+                cursorColor = Color.Black,
+                disabledLabelColor = lightBlue,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            onValueChange = {
+                name = it
+            },
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+            placeholder = {
+                Text(text = "Name")
+            }
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = country,
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = lightBlue,
+                cursorColor = Color.Black,
+                disabledLabelColor = lightBlue,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            onValueChange = {
+                country = it
+            },
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+            placeholder = {
+                Text(text = "Country")
+            }
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = language,
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = lightBlue,
+                cursorColor = Color.Black,
+                disabledLabelColor = lightBlue,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            onValueChange = {
+                language = it
+            },
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+            placeholder = {
+                Text(text = "Language")
+            }
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = email,
@@ -148,6 +219,32 @@ fun SignUpScreen(
                 scope.launch {
                     viewModel.registerUser(email, password)
                 }
+                if (
+                    name.isNotEmpty() &&
+                    country.isNotEmpty() &&
+                    language.isNotEmpty() &&
+                    email.isNotEmpty() &&
+                    password.isNotEmpty()
+                ) {
+                    val user = hashMapOf(
+                        "name" to name,
+                        "country" to country,
+                        "language" to language,
+                        "email" to email,
+                        "password" to password
+                    )
+
+                    db.collection("users")
+                        .add(user)
+                        .addOnSuccessListener { documentReference ->
+                            Log.d("fireStore entry created", "User added with id: ${documentReference.id}")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.d("fireStore error", e.toString())
+                        }
+                } else {
+                    Toast.makeText(context, "Please enter all information", Toast.LENGTH_LONG).show()
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -179,7 +276,7 @@ fun SignUpScreen(
         }
         Text(
             modifier = Modifier
-                .padding(15.dp)
+                .padding(top = 15.dp)
                 .clickable {
                     navController.navigate(Screen.LoginScreen.route)
                 },
@@ -190,7 +287,7 @@ fun SignUpScreen(
         )
         Text(
             modifier = Modifier
-                .padding(top = 40.dp),
+                .padding(top = 10.dp),
             text = "Or connect with",
             fontWeight = FontWeight.Medium,
             color = Color.Gray
