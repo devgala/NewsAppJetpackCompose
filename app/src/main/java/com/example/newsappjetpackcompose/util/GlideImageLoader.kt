@@ -15,7 +15,7 @@ import com.bumptech.glide.request.transition.Transition
 
 @Composable
 fun LoadImageByURL(
-    url : String,
+    url : String?,
     @DrawableRes defaultImg: Int
 ) : MutableState<Bitmap?>{
     val bitmap = remember {
@@ -32,17 +32,22 @@ fun LoadImageByURL(
             override fun onLoadCleared(placeholder: Drawable?) {
             }
         })
-    Glide.with(LocalContext.current)
-        .asBitmap()
-        .load(url)
-        .into(object: CustomTarget<Bitmap>(){
-            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-               bitmap.value = resource
-            }
+        if(!url.isNullOrBlank()){
+            Glide.with(LocalContext.current)
+                .asBitmap()
+                .load(url)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        bitmap.value = resource
+                    }
 
-            override fun onLoadCleared(placeholder: Drawable?) {
-            }
-        })
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+                })
+        }
 
     return bitmap
 }
