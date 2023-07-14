@@ -1,6 +1,8 @@
 package com.example.newsappjetpackcompose.view
 
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,32 +29,34 @@ import androidx.navigation.NavController
 import com.example.newsappjetpackcompose.R
 import com.example.newsappjetpackcompose.ui.theme.RegularFont
 import com.example.newsappjetpackcompose.ui.theme.lightBlue
+import com.example.newsappjetpackcompose.util.Constants.Companion.SERVER_CLIENT
 import com.example.newsappjetpackcompose.viewmodel.LoginViewModel
 import com.example.newsappjetpackcompose.webViewNav.Screen
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen(
-    navcontroller: NavController,
+    navController: NavController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
 
-//    val googleSignInState = viewModel.googleState.value
-//
-//
-//
-//
-//    val launcher =
-//        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
-//            val account = GoogleSignIn.getSignedInAccountFromIntent(it.data)
-//            try {
-//                val result = account.getResult(ApiException::class.java)
-//                val credentials = GoogleAuthProvider.getCredential(result.idToken, null)
-//                viewModel.googleSignIn(credentials)
-//            } catch (it: ApiException) {
-//                print(it)
-//            }
-//        }
+    val googleSignInState = viewModel.googleState.value
+
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+            val account = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+            try {
+                val result = account.getResult(ApiException::class.java)
+                val credentials = GoogleAuthProvider.getCredential(result.idToken, null)
+                viewModel.googleSignIn(credentials)
+            } catch (it: ApiException) {
+                print(it)
+            }
+        }
 
 
     var email by rememberSaveable { mutableStateOf("") }
@@ -161,7 +165,7 @@ fun SignInScreen(
             Modifier
                 .padding(15.dp)
                 .clickable {
-                    navcontroller.navigate(Screen.SignUpScreen.route)
+                    navController.navigate(Screen.SignUpScreen.route)
                            },
             fontWeight = FontWeight.Bold,
             color = Color.Black,
@@ -180,14 +184,14 @@ fun SignInScreen(
             horizontalArrangement = Arrangement.Center
         ) {
             IconButton(onClick = {
-//                val gso= GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                    .requestEmail()
-//                    .requestIdToken(ServerClient)
-//                    .build()
-//
-//                val googleSingInClient = GoogleSignIn.getClient(context, gso)
-//
-//                launcher.launch(googleSingInClient.signInIntent)
+                val gso= GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .requestIdToken(SERVER_CLIENT)
+                    .build()
+
+                val googleSingInClient = GoogleSignIn.getClient(context, gso)
+
+                launcher.launch(googleSingInClient.signInIntent)
 
             }) {
                 Icon(
@@ -216,21 +220,20 @@ fun SignInScreen(
                 }
             }
 
-//            LaunchedEffect(key1 = googleSignInState.success) {
-//                scope.launch {
-//                    if (googleSignInState.success != null) {
-//                        Toast.makeText(context, "Sign In Success", Toast.LENGTH_LONG).show()
-//                    }
-//                }
-//            }
+            LaunchedEffect(key1 = googleSignInState.success) {
+                scope.launch {
+                    if (googleSignInState.success != null) {
+                        Toast.makeText(context, "Sign In Success", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
 
         }
-//        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-//            if (googleSignInState.loading){
-//                CircularProgressIndicator()
-//            }
-//        }
-
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            if (googleSignInState.loading){
+                CircularProgressIndicator()
+            }
+        }
 
     }
 }

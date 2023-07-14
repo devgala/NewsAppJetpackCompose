@@ -1,10 +1,14 @@
 package com.example.newsappjetpackcompose.viewmodel
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsappjetpackcompose.signIn.AuthRepository
+import com.example.newsappjetpackcompose.states.GoogleSignInState
 import com.example.newsappjetpackcompose.states.SignInState
 import com.example.newsappjetpackcompose.util.AuthResource
+import com.google.firebase.auth.AuthCredential
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -19,33 +23,42 @@ class LoginViewModel @Inject constructor(
     private val _loginState = Channel<SignInState>()
     val loginState = _loginState.receiveAsFlow()
 
-    fun loginUser(email:String, password:String) = viewModelScope.launch {
-        repository.loginUser(email, password).collect{ result ->
-            when(result){
+    private val _googleState = mutableStateOf(GoogleSignInState())
+    val googleState: State<GoogleSignInState> = _googleState
+
+    fun googleSignIn(credential: AuthCredential) = viewModelScope.launch {
+        repository.googleSignIn(credential).collect { result ->
+            when (result) {
+                is AuthResource.Success -> {
+                    _googleState.value = GoogleSignInState(success = result.data)
+                }
+
+                is AuthResource.Loading -> {
+                    _googleState.value = GoogleSignInState(loading = true)
+                }
+
+                is AuthResource.Error -> {
+                    _googleState.value = GoogleSignInState(error = result.message!!)
+                }
+            }
+        }
+    }
+
+    fun loginUser(email: String, password: String) = viewModelScope.launch {
+        repository.loginUser(email, password).collect { result ->
+            when (result) {
                 is AuthResource.Success -> {
                     _loginState.send(SignInState(isSuccess = "Login Success"))
                 }
+
                 is AuthResource.Loading -> {
                     _loginState.send(SignInState(isLoading = true))
                 }
+
                 is AuthResource.Error -> {
                     _loginState.send(SignInState(isError = result.message))
                 }
             }
         }
     }
-
-//    private val _state = MutableStateFlow(SignInState())
-//    val state = _state.asStateFlow()
-//
-//    fun onSignInResult(result: SignInResult) {
-//        _state.update { it.copy(
-//            isSignInSuccessful = result.data!=null,
-//            signInError = result.errorMessage
-//        ) }
-//    }
-//
-//    fun resetState() {
-//        _state.update { SignInState() }
-//    }
 }
