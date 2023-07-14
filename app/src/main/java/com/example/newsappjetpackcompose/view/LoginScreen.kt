@@ -260,7 +260,7 @@ fun LoginScreen(
             LaunchedEffect(key1 = googleSignInState.success) {
                 scope.launch {
                     if (googleSignInState.success != null) {
-                        Toast.makeText(context, "Sign In Success", Toast.LENGTH_LONG).show()
+                        navController.navigate(Screen.BottomScreenNav.route)
                     }
                 }
             }
