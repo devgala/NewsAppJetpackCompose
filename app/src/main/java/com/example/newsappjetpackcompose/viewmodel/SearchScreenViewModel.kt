@@ -44,8 +44,9 @@ class SearchScreenViewModel: ViewModel() {
         onError = {
             screenState = screenState.copy(error = it?.localizedMessage)
         },
-        onRequest = { nextKey ->
-            Prepository.getSearchResponse(page= nextKey, query = searchQuery)
+
+        onRequest = { nextKey, category ->
+            Prepository.getSearchResponse(page = nextKey, query = searchQuery)
         },
         onSuccess = {
                 items,key->
@@ -66,7 +67,7 @@ class SearchScreenViewModel: ViewModel() {
 
     fun getNewsTest(){
         viewModelScope.launch {
-            paginator.loadNextArticles()
+            paginator.loadNextArticles("")
         }
     }
 }

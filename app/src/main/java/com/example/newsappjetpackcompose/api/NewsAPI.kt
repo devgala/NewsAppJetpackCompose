@@ -15,7 +15,9 @@ interface NewsAPI {
         @retrofit2.http.Query("apiKey")
         apiKey: String = API_KEY,
         @retrofit2.http.Query("pageSize")
-        pageSize:Int = 10
+        pageSize:Int = 10,
+        @retrofit2.http.Query("category")
+        category: String = ""
     ): NewsResponse
 
     @GET("v2/everything")

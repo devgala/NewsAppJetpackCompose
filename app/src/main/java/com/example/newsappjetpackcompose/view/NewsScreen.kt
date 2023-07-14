@@ -31,6 +31,7 @@ import com.example.newsappjetpackcompose.NewsResponse
 import com.example.newsappjetpackcompose.events.SavedScreenEvents
 import com.example.newsappjetpackcompose.events.UiEventsSavedScreen
 import com.example.newsappjetpackcompose.repository.NewsRepository
+import com.example.newsappjetpackcompose.uicomponents.CategoryPanel
 import com.example.newsappjetpackcompose.uicomponents.NewsCard
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
@@ -51,10 +52,8 @@ fun NewsScreenUI(
     val state = newsViewModel.screenState
     var savedScreenViewModel: SavedScreenViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
-        newsViewModel.loadNextItems()
 
-//        newsViewModel.fetchBreakingNews()
-//        Log.d("api check", newsResponse.totalResults.toString())
+        newsViewModel.loadNextItems("")
         savedScreenViewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEventsSavedScreen.showSnackBar -> {
@@ -84,11 +83,16 @@ fun NewsScreenUI(
     state.items?.let {
 
         LazyColumn {
+
+            item { 
+                CategoryPanel(newsViewModel = newsViewModel)
+            }
+
             itemsIndexed(
                 state.items
             ) { index, item ->
                 if (index >= state.items.size - 1 && !state.endReached && !state.isLoading) {
-                    newsViewModel.loadNextItems()
+                    newsViewModel.loadNextItems(newsViewModel.screenState.category)
                     Log.d("scroll", "this")
                 }
                 NewsCard(item, savedScreenViewModel::onEvent, webNavController = webNavController)

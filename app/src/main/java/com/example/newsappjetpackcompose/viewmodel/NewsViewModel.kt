@@ -37,8 +37,16 @@ class NewsViewModel : ViewModel() {
         onError = {
                   screenState = screenState.copy(error = it?.localizedMessage)
         },
-        onRequest = { nextKey ->
-            repository.getResponse(nextKey,10)
+        onRequest = { nextKey, category ->
+            if (!category.equals(screenState.category)){
+                Log.d("Viewmodel", "category changed "+category+" "+screenState.category)
+                screenState = screenState.copy(
+                    items = emptyList(),
+                    page=1,
+                    category = category
+                )
+            }
+            repository.getResponse(nextKey, 10, category)
         },
         onSuccess = {
                 items,key->
@@ -57,9 +65,9 @@ class NewsViewModel : ViewModel() {
 
         )
 
-     fun loadNextItems(){
+     fun loadNextItems(category: String){
         viewModelScope.launch {
-            paginator.loadNextArticles()
+            paginator.loadNextArticles(category)
             _isLoading.value = false
         }
     }
@@ -73,5 +81,6 @@ data class NewsScreenState(
     val items: List<com.example.newsappjetpackcompose.Article>? = emptyList(),
     val error: String? = null,
     val page: Int = 1,
-    val endReached:Boolean = false
+    val endReached:Boolean = false,
+    val category: String = ""
 )
