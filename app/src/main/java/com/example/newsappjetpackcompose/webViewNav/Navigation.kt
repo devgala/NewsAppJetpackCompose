@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.newsappjetpackcompose.view.BottomNavInit
-import com.example.newsappjetpackcompose.view.SignInScreen
+import com.example.newsappjetpackcompose.view.LoginScreen
 import com.example.newsappjetpackcompose.view.SignUpScreen
 import com.example.newsappjetpackcompose.view.WebViewScreenUI
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
@@ -28,7 +28,7 @@ fun WebViewNav(
 //            NewsScreenUI(newsViewModel = newsViewModel, navController = navController)
 //        }
         composable(route = Screen.LoginScreen.route){
-            SignInScreen(navController)
+            LoginScreen(navController)
         }
         composable(route = Screen.SignUpScreen.route){
             SignUpScreen(navController)

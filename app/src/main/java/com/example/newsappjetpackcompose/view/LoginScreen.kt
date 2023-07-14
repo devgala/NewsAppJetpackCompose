@@ -39,10 +39,12 @@ import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 
 @Composable
-fun SignInScreen(
+fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+
+    viewModel.doneInit.value = true
 
     val googleSignInState = viewModel.googleState.value
 

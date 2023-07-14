@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.newsappjetpackcompose.ui.theme.NewsAppJetpackComposeTheme
+import com.example.newsappjetpackcompose.viewmodel.LoginViewModel
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 import com.example.newsappjetpackcompose.webViewNav.WebViewNav
@@ -16,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val loginViewModel: LoginViewModel by viewModels()
     private val newsViewModel: NewsViewModel by viewModels()
     private val searchViewModel: SearchScreenViewModel by viewModels()
 
@@ -27,7 +29,7 @@ class MainActivity : ComponentActivity() {
 //               // newsViewModel.isLoading.value
 //            }
             setKeepOnScreenCondition{
-                newsViewModel.isLoading.value
+                loginViewModel.doneInit.value!!
             }
         }
         setContent {

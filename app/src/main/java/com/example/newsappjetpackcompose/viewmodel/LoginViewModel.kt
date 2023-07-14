@@ -2,6 +2,7 @@ package com.example.newsappjetpackcompose.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsappjetpackcompose.signIn.AuthRepository
@@ -22,6 +23,8 @@ class LoginViewModel @Inject constructor(
 
     private val _loginState = Channel<SignInState>()
     val loginState = _loginState.receiveAsFlow()
+
+    var doneInit = MutableLiveData(false)
 
     private val _googleState = mutableStateOf(GoogleSignInState())
     val googleState: State<GoogleSignInState> = _googleState

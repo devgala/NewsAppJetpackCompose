@@ -27,7 +27,7 @@ import javax.inject.Inject
 class NewsViewModel : ViewModel() {
     val repository = paginatonRepository()
     var screenState by  mutableStateOf(NewsScreenState())
-    val _isLoading = MutableStateFlow(false)
+    val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
     private val paginator = DefaultPaginator(
         initialKey = screenState.page,
