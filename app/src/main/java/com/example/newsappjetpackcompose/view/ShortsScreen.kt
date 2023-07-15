@@ -96,13 +96,29 @@ fun ShortsScreenUI(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) { index ->
+                if (index >= state.items.size - 1 && !state.endReached && !state.isLoading) {
+                    newsViewModel.loadNextItems()
+                    Log.d("scroll", "this")
+                }
                 ShortsCard(
                     article = state.items[index],
                     onEvent = savedScreenViewModel::onEvent,
                     webNavController = webNavController
                 )
+                if (state.isLoading) {
 
-            }
+
+                    Box(Modifier.fillMaxWidth()) {
+
+                        CircularProgressIndicator(
+                            Modifier
+                                .align(Alignment.Center)
+                                .padding(5.dp)
+                        )
+                    }
+
+
+                }
 //            item {
 //                CategoryPanel(newsViewModel = newsViewModel)
 //            }
@@ -131,8 +147,9 @@ fun ShortsScreenUI(
 //            }
 
 
-        }
+            }
 
+        }
     }
 }
 

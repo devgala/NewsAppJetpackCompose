@@ -145,7 +145,7 @@ fun ShortsCard(
                         .height(2.dp)
                 )
                 Text(
-                    text = article.description,
+                    text = article.description?:"",
                     color = Color.Black,
                     fontSize = 15.sp,
                     modifier = Modifier.padding(7.dp),
