@@ -40,8 +40,9 @@ class SearchScreenViewModel : ViewModel() {
 
     )
 
-    fun getNewsTest() {
+    fun getNewsTest(language:String="en") {
         viewModelScope.launch {
+            Prepository.language=language
             paginator.loadNextArticles()
         }
     }

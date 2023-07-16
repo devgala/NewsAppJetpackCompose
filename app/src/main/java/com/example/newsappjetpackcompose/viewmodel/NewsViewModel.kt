@@ -67,8 +67,9 @@ class NewsViewModel : ViewModel() {
             _weatherResponse.value = weatherRepository.getWeatherData(location);
         }
     }
-     fun loadNextItems(){
+     fun loadNextItems(language:String="en"){
         viewModelScope.launch {
+            repository.language = language
             paginator.loadNextArticles()
             _isLoading.value = false
         }

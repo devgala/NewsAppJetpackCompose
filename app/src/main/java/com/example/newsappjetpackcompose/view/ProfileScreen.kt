@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -32,28 +34,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.newsappjetpackcompose.PreferencesManager
 import com.example.newsappjetpackcompose.R
 import com.example.newsappjetpackcompose.util.Languages
 import com.example.newsappjetpackcompose.util.LoadImageByURL
+import com.example.newsappjetpackcompose.webViewNav.Screen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavController) {
+    val context = LocalContext.current
+    val preferencesManager = remember { PreferencesManager(context) }
+    val spName = remember { mutableStateOf(preferencesManager.getData("name","")) }
+    val spLanguage = remember { mutableStateOf(preferencesManager.getData("language","")) }
+    val spCountry = remember { mutableStateOf(preferencesManager.getData("country","")) }
+    val spEmail = remember { mutableStateOf(preferencesManager.getData("email","")) }
     val isExpanded = remember {
         mutableStateOf(false)
     }
     val languageField = remember {
-        mutableStateOf("ENGLISH")
+        mutableStateOf(if(spLanguage.value==""){"English"}else{spLanguage.value})
 
     }
     val languageCode = remember {
-        mutableStateOf("en")
+        mutableStateOf("")
     }
     Column(/*modifier = Modifier.fillMaxSize()*/
     ) {
@@ -95,7 +107,7 @@ fun ProfileScreen() {
 
                         )
                 }
-                Text(text = "THIS IS NAME", fontWeight = FontWeight.ExtraBold, fontSize = 28.sp)
+                Text(text = spName.value, fontWeight = FontWeight.ExtraBold, fontSize = 28.sp)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -116,7 +128,7 @@ fun ProfileScreen() {
                         contentDescription = null, tint = Color.DarkGray
                     )
                     OutlinedTextField(
-                        value = "THIS IS EMAIL",
+                        value = spEmail.value,
                         onValueChange = {},
                         readOnly = true,
                         enabled = false,
@@ -129,7 +141,7 @@ fun ProfileScreen() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        "Select Language:",
+                        "Select Language",
                         modifier = Modifier.padding(
                             top = 10.dp,
                             bottom = 10.dp,
@@ -171,30 +183,60 @@ fun ProfileScreen() {
                         .fillMaxWidth()
                         .fillMaxHeight(0.5F)
                 )
+Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceEvenly){
+    ElevatedButton(
+        onClick = {
+            //logout logic
+        },
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+        modifier = Modifier.padding(vertical = 10.dp),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 10.dp, pressedElevation = 0.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Sign Out",
+                fontWeight = FontWeight.Bold,
+                fontSize = 15.sp,
+                color = Color.White,
+                modifier = Modifier.padding(10.dp)
+            )
+            Icon(imageVector = Icons.Default.ExitToApp, contentDescription = null)
 
-                ElevatedButton(
-                    onClick = {
-                        //logout logic
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-                    modifier = Modifier.padding(vertical = 10.dp),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 10.dp, pressedElevation = 0.dp)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Sign Out",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp,
-                            color = Color.White,
-                            modifier = Modifier.padding(10.dp)
-                        )
-                        Icon(imageVector = Icons.Default.ExitToApp, contentDescription = null)
+        }
+    }
+    ElevatedButton(
+        onClick = {
+           preferencesManager.saveData("language",languageField.value)
+            spLanguage.value = languageField.value
+            navController.navigate(Screen.BottomScreenNav.route)
+            {
+                popUpTo(Screen.BottomScreenNav.route){inclusive=false}
+            }
+        },
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Green),
+        modifier = Modifier.padding(vertical = 10.dp),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 10.dp, pressedElevation = 0.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Save Changes",
+                fontWeight = FontWeight.Bold,
+                fontSize = 15.sp,
+                color = Color.White,
+                modifier = Modifier.padding(10.dp)
+            )
+            Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null)
 
-                    }
-                }
+        }
+    }
+}
+
             }
         }
     }
@@ -203,5 +245,5 @@ fun ProfileScreen() {
 @Preview(showBackground = true)
 @Composable
 fun preview() {
-    ProfileScreen()
+    //ProfileScreen()
 }

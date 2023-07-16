@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
@@ -43,15 +44,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.newsappjetpackcompose.NewsResponse
+import com.example.newsappjetpackcompose.PreferencesManager
 import com.example.newsappjetpackcompose.events.SavedScreenEvents
 import com.example.newsappjetpackcompose.events.UiEventsSavedScreen
 import com.example.newsappjetpackcompose.uicomponents.NewsCard
+import com.example.newsappjetpackcompose.util.Languages
 import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 
 @Composable
 fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:SnackbarHostState, webNavController: NavController) {
-
+    val context = LocalContext.current
+    val preferencesManager = remember { PreferencesManager(context) }
+    val spName = remember { mutableStateOf(preferencesManager.getData("name","")) }
+    val spLanguage = remember { mutableStateOf(preferencesManager.getData("language","")) }
    // val newsResponse by searchViewModel.searchedNews.observeAsState(NewsResponse())
     val screenState = searchViewModel.screenState
     val savedScreenViewModel: SavedScreenViewModel = hiltViewModel()
@@ -83,7 +89,8 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:Snac
     SearchAppBar(
         onSearchClicked = {
             searchViewModel.searchQuery = it.text
-            searchViewModel.getNewsTest()
+            val langCode = Languages.languageCodeMap[spLanguage.value]
+           searchViewModel.getNewsTest(langCode?:"en")
         },
     )
 

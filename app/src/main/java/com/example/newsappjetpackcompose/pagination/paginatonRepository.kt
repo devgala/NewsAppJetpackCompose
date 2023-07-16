@@ -4,13 +4,15 @@ import android.util.Log
 import com.example.newsappjetpackcompose.Article
 import com.example.newsappjetpackcompose.NewsResponse
 import com.example.newsappjetpackcompose.repository.NewsRepository
+import com.example.newsappjetpackcompose.util.Language
 import kotlinx.coroutines.delay
 import retrofit2.http.Query
 
-class paginatonRepository {
+class paginatonRepository(var language: String = "en") {
     private var newsData:NewsResponse? = null
     private val newsRepository = NewsRepository()
     private var searchData: NewsResponse? = null
+
     suspend fun getResponse(page:Int,pageSize:Int):Result<List<Article>?>{
 //        if(data==null){
 //            data = newsRepository.getBreakingNews("in",1)
@@ -25,7 +27,7 @@ class paginatonRepository {
 //        }else{
 //             Result.success(emptyList())
 //        }
-        newsData = newsRepository.getBreakingNews("in",page);
+        newsData = newsRepository.getBreakingNews("in",page,language);
         Log.d("response", if(newsData?.articles==emptyList<Article>()){
             "NULL or empty"
         }else{
@@ -41,7 +43,7 @@ class paginatonRepository {
 
 
     suspend fun getSearchResponse(page:Int,query: String):Result<List<Article>?>{
-        searchData = newsRepository.getSearchedNews(query,page)
+        searchData = newsRepository.getSearchedNews(query,page,language)
 
         searchData?.let {
             return Result.success(searchData?.articles)

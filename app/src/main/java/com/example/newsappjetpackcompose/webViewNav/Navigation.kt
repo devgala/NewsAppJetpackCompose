@@ -49,7 +49,7 @@ fun WebViewNav(
             entry.arguments?.getString("url")?.let { WebViewScreenUI(url = it) }
         }
     composable(route = Screen.ProfileScreen.route){
-        ProfileScreen()
+        ProfileScreen(navController=navController)
     }
     }
 }

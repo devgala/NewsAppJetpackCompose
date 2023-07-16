@@ -4,9 +4,9 @@ import com.example.newsappjetpackcompose.api.RetrofitInstance
 import com.example.newsappjetpackcompose.db.ArticleDatabase
 
 class NewsRepository {
-    suspend fun getBreakingNews(countryCode: String, pageNumber: Int) =
-        RetrofitInstance.api.getBreakingNews(countryCode, pageNumber)
+    suspend fun getBreakingNews(countryCode: String, pageNumber: Int,language:String="en") =
+        RetrofitInstance.api.getBreakingNews(countryCode, pageNumber, language = language)
 
-    suspend fun getSearchedNews(searchQuery: String, pageNumber: Int) =
-        RetrofitInstance.api.getSearchedNews(searchQuery, pageNumber)
+    suspend fun getSearchedNews(searchQuery: String, pageNumber: Int,language:String="en") =
+        RetrofitInstance.api.getSearchedNews(searchQuery, pageNumber, language = language)
 }
