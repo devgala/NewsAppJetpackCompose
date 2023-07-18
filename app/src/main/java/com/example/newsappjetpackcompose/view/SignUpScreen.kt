@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.newsappjetpackcompose.PreferencesManager
 import com.example.newsappjetpackcompose.R
 import com.example.newsappjetpackcompose.ui.theme.RegularFont
 import com.example.newsappjetpackcompose.ui.theme.lightBlue
@@ -54,6 +55,7 @@ import com.example.newsappjetpackcompose.util.Languages
 import com.example.newsappjetpackcompose.viewmodel.SignUpViewModel
 import com.example.newsappjetpackcompose.webViewNav.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
@@ -71,6 +73,7 @@ fun SignUpScreen(
 
     val db = Firebase.firestore
 
+    val googleAccount = remember { mutableStateOf<GoogleSignInAccount?>(null) }
     val googleSignInState = viewModel.googleState.value
 
     val launcher =
@@ -78,6 +81,7 @@ fun SignUpScreen(
             val account = GoogleSignIn.getSignedInAccountFromIntent(it.data)
             try {
                 val result = account.getResult(ApiException::class.java)
+                googleAccount.value = result
                 val credentials = GoogleAuthProvider.getCredential(result.idToken, null)
                 viewModel.googleSignIn(credentials)
             } catch (it: ApiException) {
@@ -95,7 +99,14 @@ fun SignUpScreen(
     }
     val scope = rememberCoroutineScope()
     val state = viewModel.signUpState.collectAsState(initial = null)
+
     val context = LocalContext.current
+    val preferencesManager = remember { PreferencesManager(context) }
+    val spName = remember { mutableStateOf(preferencesManager.getData("name","")) }
+    val spLanguage = remember { mutableStateOf(preferencesManager.getData("language","English")) }
+    val spCountry = remember { mutableStateOf(preferencesManager.getData("country","India")) }
+    val spEmail = remember { mutableStateOf(preferencesManager.getData("email","")) }
+    val spPassword = remember { mutableStateOf(preferencesManager.getData("password","")) }
 
     Column(
         modifier = Modifier
@@ -316,9 +327,9 @@ fun SignUpScreen(
                     .requestIdToken(Constants.SERVER_CLIENT)
                     .build()
 
-                val googleSingInClient = GoogleSignIn.getClient(context, gso)
+                val googleSignInClient = GoogleSignIn.getClient(context, gso)
 
-                launcher.launch(googleSingInClient.signInIntent)
+                launcher.launch(googleSignInClient.signInIntent)
             }) {
                 Icon(
                     modifier = Modifier.size(50.dp),
@@ -327,6 +338,7 @@ fun SignUpScreen(
                     tint = Color.Unspecified
                 )
             }
+
 
             LaunchedEffect(key1 = state.value?.isSuccess) {
                 scope.launch {
@@ -369,6 +381,11 @@ fun SignUpScreen(
                 scope.launch {
                     if (googleSignInState.success != null) {
                         Toast.makeText(context, "Sign In Success", Toast.LENGTH_LONG).show()
+                        preferencesManager.saveData("name", googleAccount.value?.displayName!!)
+                        spName.value = googleAccount.value?.displayName!!
+                        preferencesManager.saveData("email", googleAccount.value?.email!!)
+                        spEmail.value = googleAccount.value?.email!!
+
                         navController.navigate(Screen.BottomScreenNav.route)
                     }
                 }
