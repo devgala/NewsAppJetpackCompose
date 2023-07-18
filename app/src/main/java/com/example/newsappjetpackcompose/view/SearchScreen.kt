@@ -59,7 +59,7 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:Snac
     val spName = remember { mutableStateOf(preferencesManager.getData("name","")) }
     val spLanguage = remember { mutableStateOf(preferencesManager.getData("language","")) }
    // val newsResponse by searchViewModel.searchedNews.observeAsState(NewsResponse())
-    val screenState = searchViewModel.screenState
+    var screenState = searchViewModel.screenState
     val savedScreenViewModel: SavedScreenViewModel = hiltViewModel()
     LaunchedEffect(key1 = true ){
 
@@ -90,6 +90,8 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:Snac
         onSearchClicked = {
             searchViewModel.searchQuery = it.text
             val langCode = Languages.languageCodeMap[spLanguage.value]
+             searchViewModel.resetList()
+            searchViewModel.paginator.reset()
            searchViewModel.getNewsTest(langCode?:"en")
         },
     )
@@ -103,9 +105,9 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:Snac
             screenState.items?.let {
 
                 itemsIndexed(
-                    screenState.items
+                    screenState.items!!
                 ) { index, article ->
-                    if (index >= screenState.items.size - 1 && !screenState.endReached && !screenState.isLoading) {
+                    if (index >= screenState.items!!.size - 1 && !screenState.endReached && !screenState.isLoading) {
                         searchViewModel.getNewsTest()
                         Log.d("scroll", "this")
                     }
