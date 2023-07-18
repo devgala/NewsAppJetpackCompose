@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import com.example.newsappjetpackcompose.view.NewsScreenUI
 import com.example.newsappjetpackcompose.view.SavedScreenUI
 import com.example.newsappjetpackcompose.view.SearchScreenUI
+import com.example.newsappjetpackcompose.view.ShortsScreenUI
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 
@@ -32,6 +33,10 @@ fun NavConfiguration(
       }
       composable(Screens.SearchScreen.route){
           SearchScreenUI(searchViewModel = searchViewModel,snackbarHostState=snackbarHostState, webNavController = webNavController)
+
+      }
+      composable(Screens.ShortsScreen.route){
+          ShortsScreenUI(newsViewModel = newsViewModel,snackbarHostState=snackbarHostState, webNavController = webNavController)
 
       }
   })

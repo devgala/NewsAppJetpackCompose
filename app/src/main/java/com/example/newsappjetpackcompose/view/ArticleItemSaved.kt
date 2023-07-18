@@ -1,13 +1,11 @@
 package com.example.newsappjetpackcompose.view
 
-import android.graphics.drawable.Icon
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -18,14 +16,12 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.newsappjetpackcompose.R
 import com.example.newsappjetpackcompose.events.SavedScreenEvents
 import com.example.newsappjetpackcompose.model.Article
-import com.example.newsappjetpackcompose.model.Source
 import com.example.newsappjetpackcompose.util.LoadImageByURL
 import com.example.newsappjetpackcompose.util.getFormattedDate
 import com.example.newsappjetpackcompose.webViewNav.Screen
@@ -80,7 +76,11 @@ fun ArticleItemSaved(
                     .height(10.dp)
                 )
                 Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
-                    sourceNameDisplay(modifier = Modifier, sourceName =article.source_name, publishedAt = article.publishedAt)
+                    com.example.newsappjetpackcompose.uicomponents.sourceNameDisplay(
+                        modifier = Modifier,
+                        sourceName = article.source_name,
+                        publishedAt = article.publishedAt
+                    )
                     Text(text = getFormattedDate(article.publishedAt),color = Color.Gray, fontSize = 15.sp)
                     IconButton(onClick = {onEvent(SavedScreenEvents.onClickDelete(article))}){
                         Icon(imageVector = Icons.Default.Delete, contentDescription =null, tint = Color.Red, modifier = Modifier.padding(7.dp))

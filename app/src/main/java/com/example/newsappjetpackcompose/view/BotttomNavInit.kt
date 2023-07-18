@@ -33,7 +33,7 @@ import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 @Composable
 fun BottomNavInit(newsViewModel: NewsViewModel, searchViewModel: SearchScreenViewModel, webNavController: NavController) {
     val navController = rememberNavController()
-    val navList = listOf(Screens.NewsScreen, Screens.SearchScreen, Screens.SavedScreen)
+    val navList = listOf(Screens.NewsScreen, Screens.SearchScreen, Screens.SavedScreen, Screens.ShortsScreen)
     val snackbarHostState = remember { SnackbarHostState() }
     var appBarTitle = rememberSaveable{
         mutableStateOf("News App")
@@ -53,6 +53,10 @@ fun BottomNavInit(newsViewModel: NewsViewModel, searchViewModel: SearchScreenVie
         Screens.NewsScreen.route->{
             topBarState.value= true
             appBarTitle.value = "News App"
+        }
+        Screens.ShortsScreen.route->{
+            topBarState.value= true
+            appBarTitle.value = "Shorts"
         }
     }
     Scaffold(
