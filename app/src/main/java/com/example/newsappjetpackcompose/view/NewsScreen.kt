@@ -33,6 +33,7 @@ import com.example.newsappjetpackcompose.events.UiEventsSavedScreen
 import com.example.newsappjetpackcompose.repository.NewsRepository
 import com.example.newsappjetpackcompose.uicomponents.CategoryPanel
 import com.example.newsappjetpackcompose.uicomponents.NewsCard
+import com.example.newsappjetpackcompose.uicomponents.WeatherDisplay
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,12 +49,18 @@ fun NewsScreenUI(
 ) {
 
 
-    val newScreenViewModel = viewModel<NewsViewModel>()
+    val weatherData = newsViewModel.weatherResponse.observeAsState()
     val state = newsViewModel.screenState
     var savedScreenViewModel: SavedScreenViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
 
+
         newsViewModel.loadNextItems("")
+
+       
+        newsViewModel.loadWeather()
+        weatherData.value?.let { Log.d("weather", it.toString()) }
+
         savedScreenViewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEventsSavedScreen.showSnackBar -> {
@@ -73,7 +80,7 @@ fun NewsScreenUI(
             }
         }
     }
-    // Log.d("api check", newsResponse.articles.toString())
+
     if (state.items == null) {
         Box(modifier = Modifier.fillMaxSize()) {
             Text(text = "No news to display", modifier = Modifier.align(Alignment.Center))
@@ -84,8 +91,20 @@ fun NewsScreenUI(
 
         LazyColumn {
 
+
             item { 
                 CategoryPanel(newsViewModel = newsViewModel)
+            }
+
+
+            weatherData.value?.let {
+
+                item{
+                    WeatherDisplay(it) {
+
+                        newsViewModel.loadWeather(it)
+                    }
+                }
             }
 
             itemsIndexed(
