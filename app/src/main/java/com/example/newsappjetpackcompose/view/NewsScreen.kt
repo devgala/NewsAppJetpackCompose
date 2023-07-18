@@ -34,6 +34,7 @@ import com.example.newsappjetpackcompose.PreferencesManager
 import com.example.newsappjetpackcompose.events.SavedScreenEvents
 import com.example.newsappjetpackcompose.events.UiEventsSavedScreen
 import com.example.newsappjetpackcompose.repository.NewsRepository
+import com.example.newsappjetpackcompose.uicomponents.CategoryPanel
 import com.example.newsappjetpackcompose.uicomponents.NewsCard
 import com.example.newsappjetpackcompose.uicomponents.WeatherDisplay
 import com.example.newsappjetpackcompose.util.Languages
@@ -59,7 +60,6 @@ fun NewsScreenUI(
     val langCode = rememberSaveable { mutableStateOf(Languages.languageCodeMap[spLanguage.value]) }
     var savedScreenViewModel: SavedScreenViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
-
         newsViewModel.loadNextItems(langCode.value?:"en")
         newsViewModel.loadWeather()
         weatherData.value?.let { Log.d("weather", it.toString()) }
@@ -92,6 +92,13 @@ fun NewsScreenUI(
     state.items?.let {
 
         LazyColumn {
+
+
+            item {
+                CategoryPanel(newsViewModel = newsViewModel)
+            }
+
+
             weatherData.value?.let {
 
                 item{
@@ -106,6 +113,7 @@ fun NewsScreenUI(
             ) { index, item ->
                 if (index >= state.items.size - 1 && !state.endReached && !state.isLoading) {
                     newsViewModel.loadNextItems(langCode.value?:"en")
+                    //newsViewModel.loadNextItems(newsViewModel.screenState.category)
                     Log.d("scroll", "this")
                 }
                 NewsCard(item, savedScreenViewModel::onEvent, webNavController = webNavController)

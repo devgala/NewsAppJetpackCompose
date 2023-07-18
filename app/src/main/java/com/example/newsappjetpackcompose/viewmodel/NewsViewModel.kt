@@ -42,8 +42,16 @@ class NewsViewModel : ViewModel() {
         onError = {
                   screenState = screenState.copy(error = it?.localizedMessage)
         },
-        onRequest = { nextKey ->
-            repository.getResponse(nextKey,10)
+        onRequest = { (nextKey, category) ->
+            if (!category.equals(screenState.category)){
+                Log.d("Viewmodel", "category changed "+category+" "+screenState.category)
+                screenState = screenState.copy(
+                    items = emptyList(),
+                    page=1,
+                    category = category
+                )
+            }
+            repository.getResponse(nextKey, 10, category)
         },
         onSuccess = {
                 items,key->
@@ -67,10 +75,11 @@ class NewsViewModel : ViewModel() {
             _weatherResponse.value = weatherRepository.getWeatherData(location);
         }
     }
-     fun loadNextItems(language:String="en"){
+     fun loadNextItems(language:String="en",category: String= ""){
         viewModelScope.launch {
             repository.language = language
-            paginator.loadNextArticles()
+            //paginator.loadNextArticles()
+            paginator.loadNextArticles(category)
             _isLoading.value = false
         }
     }
@@ -84,5 +93,6 @@ data class NewsScreenState(
     val items: List<com.example.newsappjetpackcompose.Article>? = emptyList(),
     val error: String? = null,
     val page: Int = 1,
-    val endReached:Boolean = false
+    val endReached:Boolean = false,
+    val category: String = ""
 )

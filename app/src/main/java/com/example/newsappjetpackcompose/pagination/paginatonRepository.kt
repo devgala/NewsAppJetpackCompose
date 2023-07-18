@@ -12,8 +12,7 @@ class paginatonRepository(var language: String = "en") {
     private var newsData:NewsResponse? = null
     private val newsRepository = NewsRepository()
     private var searchData: NewsResponse? = null
-
-    suspend fun getResponse(page:Int,pageSize:Int):Result<List<Article>?>{
+    suspend fun getResponse(page:Int,pageSize:Int, category: String):Result<List<Article>?>{
 //        if(data==null){
 //            data = newsRepository.getBreakingNews("in",1)
 //            Log.i("scroll","null")
@@ -27,7 +26,7 @@ class paginatonRepository(var language: String = "en") {
 //        }else{
 //             Result.success(emptyList())
 //        }
-        newsData = newsRepository.getBreakingNews("in",page,language);
+        newsData = newsRepository.getBreakingNews("in",page, language = language, category = category);
         Log.d("response", if(newsData?.articles==emptyList<Article>()){
             "NULL or empty"
         }else{

@@ -1,6 +1,6 @@
 package com.example.newsappjetpackcompose.pagination
 
 interface Paginator<Item> {
-    suspend fun  loadNextArticles()
+    suspend fun  loadNextArticles(category: String)
     fun reset()
 }
