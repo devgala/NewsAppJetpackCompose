@@ -11,12 +11,14 @@ import androidx.compose.ui.platform.LocalContext
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.newsappjetpackcompose.R
 
 
 @Composable
 fun LoadImageByURL(
-    url : String?,
-    @DrawableRes defaultImg: Int
+    url : String,
+    @DrawableRes defaultImg: Int = R.drawable.img
+
 ) : MutableState<Bitmap?>{
     val bitmap = remember {
         mutableStateOf<Bitmap?>(null)

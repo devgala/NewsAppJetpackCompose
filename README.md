@@ -49,7 +49,7 @@ To get started with the project, follow these steps:
 3. Build and run the app on an emulator or physical device.
 
 ## Contributors
--[Priyank Sethiya](https://github.com/Priyank-Shethia3)
+-[Priyank Shethia](https://github.com/Priyank-Shethia3)
 -[Param Gupta](https://github.com/Param-GG)
 -[Dev Gala](https://github.com/devgala)
 
