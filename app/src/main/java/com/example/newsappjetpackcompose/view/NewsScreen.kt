@@ -112,8 +112,8 @@ fun NewsScreenUI(
                 state.items
             ) { index, item ->
                 if (index >= state.items.size - 1 && !state.endReached && !state.isLoading) {
-                    newsViewModel.loadNextItems(langCode.value?:"en")
-                    //newsViewModel.loadNextItems(newsViewModel.screenState.category)
+                  //  newsViewModel.loadNextItems(langCode.value?:"en")
+                    newsViewModel.loadNextItems(category = newsViewModel.screenState.category, language = langCode.value?:"en")
                     Log.d("scroll", "this")
                 }
                 NewsCard(item, savedScreenViewModel::onEvent, webNavController = webNavController)

@@ -23,7 +23,7 @@ class SearchScreenViewModel : ViewModel() {
         },
 
 
-        onRequest = { (nextKey, category) ->
+        onRequest = { nextKey, category ->
             Prepository.getSearchResponse(page = nextKey, query = searchQuery)
         },
         onSuccess = { items, key ->

@@ -1,11 +1,14 @@
 package com.example.newsappjetpackcompose.uicomponents
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.unit.dp
 import com.example.newsappjetpackcompose.util.Constants.Companion.CATEGORIES
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 
@@ -13,7 +16,7 @@ import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 fun CategoryPanel(newsViewModel: NewsViewModel){
     LazyRow{
         itemsIndexed(CATEGORIES){
-            index, item ->  Button(onClick = { newsViewModel.loadNextItems(item) }){
+            index, item ->  Button(onClick = { newsViewModel.loadNextItems(category = item) },modifier = Modifier.padding(3.dp)){
                 Text(text = item.capitalize())
             }
         }

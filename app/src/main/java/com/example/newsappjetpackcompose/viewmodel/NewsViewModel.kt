@@ -42,7 +42,7 @@ class NewsViewModel : ViewModel() {
         onError = {
                   screenState = screenState.copy(error = it?.localizedMessage)
         },
-        onRequest = { (nextKey, category) ->
+        onRequest = { nextKey, category ->
             if (!category.equals(screenState.category)){
                 Log.d("Viewmodel", "category changed "+category+" "+screenState.category)
                 screenState = screenState.copy(
