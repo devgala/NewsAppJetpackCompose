@@ -42,7 +42,7 @@ fun BottomNavInit(
     webNavController: NavController
 ) {
     val navController = rememberNavController()
-    val navList = listOf(Screens.NewsScreen, Screens.SearchScreen, Screens.SavedScreen, Screens.ShortsScreen)
+    val navList = listOf(Screens.NewsScreen, Screens.SearchScreen, Screens.ShortsScreen,Screens.SavedScreen)
     val snackbarHostState = remember { SnackbarHostState() }
     var appBarTitle = rememberSaveable {
         mutableStateOf("News App")

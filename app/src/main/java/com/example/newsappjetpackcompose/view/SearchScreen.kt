@@ -56,7 +56,6 @@ import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:SnackbarHostState, webNavController: NavController) {
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
-    val spName = remember { mutableStateOf(preferencesManager.getData("name","")) }
     val spLanguage = remember { mutableStateOf(preferencesManager.getData("language","")) }
    // val newsResponse by searchViewModel.searchedNews.observeAsState(NewsResponse())
     var screenState = searchViewModel.screenState
@@ -88,6 +87,7 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:Snac
 
     SearchAppBar(
         onSearchClicked = {
+            if(it.text.isNullOrEmpty()) return@SearchAppBar
             searchViewModel.searchQuery = it.text
             val langCode = Languages.languageCodeMap[spLanguage.value]
              searchViewModel.resetList()
