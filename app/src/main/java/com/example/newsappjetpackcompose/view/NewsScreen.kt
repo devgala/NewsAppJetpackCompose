@@ -103,7 +103,6 @@ fun NewsScreenUI(
 
                 item{
                     WeatherDisplay(it) {
-
                         newsViewModel.loadWeather(it)
                     }
                 }
