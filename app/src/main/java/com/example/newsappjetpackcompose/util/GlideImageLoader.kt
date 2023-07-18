@@ -18,6 +18,7 @@ import com.example.newsappjetpackcompose.R
 fun LoadImageByURL(
     url : String,
     @DrawableRes defaultImg: Int = R.drawable.img
+
 ) : MutableState<Bitmap?>{
     val bitmap = remember {
         mutableStateOf<Bitmap?>(null)
@@ -33,17 +34,22 @@ fun LoadImageByURL(
             override fun onLoadCleared(placeholder: Drawable?) {
             }
         })
-    Glide.with(LocalContext.current)
-        .asBitmap()
-        .load(url)
-        .into(object: CustomTarget<Bitmap>(){
-            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-               bitmap.value = resource
-            }
+        if(!url.isNullOrBlank()){
+            Glide.with(LocalContext.current)
+                .asBitmap()
+                .load(url)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        bitmap.value = resource
+                    }
 
-            override fun onLoadCleared(placeholder: Drawable?) {
-            }
-        })
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+                })
+        }
 
     return bitmap
 }
