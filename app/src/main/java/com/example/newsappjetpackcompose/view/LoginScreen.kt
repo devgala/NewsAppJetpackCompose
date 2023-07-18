@@ -35,6 +35,7 @@ import com.example.newsappjetpackcompose.util.Constants.Companion.SERVER_CLIENT
 import com.example.newsappjetpackcompose.viewmodel.LoginViewModel
 import com.example.newsappjetpackcompose.webViewNav.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
@@ -53,13 +54,14 @@ fun LoginScreen(
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
     val spName = remember { mutableStateOf(preferencesManager.getData("name","")) }
-    val spLanguage = remember { mutableStateOf(preferencesManager.getData("language","")) }
-    val spCountry = remember { mutableStateOf(preferencesManager.getData("country","")) }
+    val spLanguage = remember { mutableStateOf(preferencesManager.getData("language","English")) }
+    val spCountry = remember { mutableStateOf(preferencesManager.getData("country","India")) }
     val spEmail = remember { mutableStateOf(preferencesManager.getData("email","")) }
     val spPassword = remember { mutableStateOf(preferencesManager.getData("password","")) }
 
     viewModel.doneInit.value = true
 
+    val googleAccount = remember { mutableStateOf<GoogleSignInAccount?>(null) }
     val googleSignInState = viewModel.googleState.value
 
     val launcher =
@@ -67,6 +69,7 @@ fun LoginScreen(
             val account = GoogleSignIn.getSignedInAccountFromIntent(it.data)
             try {
                 val result = account.getResult(ApiException::class.java)
+                googleAccount.value = result
                 val credentials = GoogleAuthProvider.getCredential(result.idToken, null)
                 viewModel.googleSignIn(credentials)
             } catch (it: ApiException) {
@@ -204,9 +207,9 @@ fun LoginScreen(
                     .requestIdToken(SERVER_CLIENT)
                     .build()
 
-                val googleSingInClient = GoogleSignIn.getClient(context, gso)
+                val googleSignInClient = GoogleSignIn.getClient(context, gso)
 
-                launcher.launch(googleSingInClient.signInIntent)
+                launcher.launch(googleSignInClient.signInIntent)
 
             }) {
                 Icon(
@@ -216,6 +219,7 @@ fun LoginScreen(
                     tint = Color.Unspecified
                 )
             }
+
 
             LaunchedEffect(key1 = state.value?.isSuccess) {
                 scope.launch {
@@ -260,6 +264,11 @@ fun LoginScreen(
             LaunchedEffect(key1 = googleSignInState.success) {
                 scope.launch {
                     if (googleSignInState.success != null) {
+                        preferencesManager.saveData("name", googleAccount.value?.displayName!!)
+                        spName.value = googleAccount.value?.displayName!!
+                        preferencesManager.saveData("email", googleAccount.value?.email!!)
+                        spEmail.value = googleAccount.value?.email!!
+
                         navController.navigate(Screen.BottomScreenNav.route)
                     }
                 }
