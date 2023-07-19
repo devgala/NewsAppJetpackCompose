@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
@@ -43,17 +44,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.newsappjetpackcompose.NewsResponse
+import com.example.newsappjetpackcompose.PreferencesManager
 import com.example.newsappjetpackcompose.events.SavedScreenEvents
 import com.example.newsappjetpackcompose.events.UiEventsSavedScreen
 import com.example.newsappjetpackcompose.uicomponents.NewsCard
+import com.example.newsappjetpackcompose.util.Languages
 import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
 
 @Composable
 fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:SnackbarHostState, webNavController: NavController) {
-
+    val context = LocalContext.current
+    val preferencesManager = remember { PreferencesManager(context) }
+    val spLanguage = remember { mutableStateOf(preferencesManager.getData("language","")) }
    // val newsResponse by searchViewModel.searchedNews.observeAsState(NewsResponse())
-    val screenState = searchViewModel.screenState
+    var screenState = searchViewModel.screenState
     val savedScreenViewModel: SavedScreenViewModel = hiltViewModel()
     LaunchedEffect(key1 = true ){
 
@@ -82,8 +87,12 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:Snac
 
     SearchAppBar(
         onSearchClicked = {
+            if(it.text.isNullOrEmpty()) return@SearchAppBar
             searchViewModel.searchQuery = it.text
-            searchViewModel.getNewsTest()
+            val langCode = Languages.languageCodeMap[spLanguage.value]
+             searchViewModel.resetList()
+            searchViewModel.paginator.reset()
+           searchViewModel.getNewsTest(langCode?:"en")
         },
     )
 
@@ -96,9 +105,9 @@ fun SearchScreenUI(searchViewModel: SearchScreenViewModel,snackbarHostState:Snac
             screenState.items?.let {
 
                 itemsIndexed(
-                    screenState.items
+                    screenState.items!!
                 ) { index, article ->
-                    if (index >= screenState.items.size - 1 && !screenState.endReached && !screenState.isLoading) {
+                    if (index >= screenState.items!!.size - 1 && !screenState.endReached && !screenState.isLoading) {
                         searchViewModel.getNewsTest()
                         Log.d("scroll", "this")
                     }

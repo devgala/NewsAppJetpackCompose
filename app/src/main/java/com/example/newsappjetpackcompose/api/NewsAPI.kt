@@ -16,6 +16,8 @@ interface NewsAPI {
         apiKey: String = API_KEY,
         @retrofit2.http.Query("pageSize")
         pageSize:Int = 10,
+        @retrofit2.http.Query("language")
+        language: String = "en",
         @retrofit2.http.Query("category")
         category: String = ""
     ): NewsResponse
@@ -29,6 +31,8 @@ interface NewsAPI {
         @retrofit2.http.Query("apiKey")
         apiKey: String = API_KEY,
         @retrofit2.http.Query("pageSize")
-        pageSize:Int = 10
+        pageSize:Int = 10,
+        @retrofit2.http.Query("language")
+        language: String = "en"
     ): NewsResponse
 }

@@ -69,15 +69,16 @@ class NewsViewModel : ViewModel() {
         }
 
         )
-
-   fun loadWeather(location:String= "Mumbai"){
+     fun loadWeather(location:String= "Mumbai"){
         viewModelScope.launch {
            // weatherResponse.value = weatherRepository.getWeatherData(1.0,1.0);
             _weatherResponse.value = weatherRepository.getWeatherData(location);
         }
     }
-     fun loadNextItems(category: String){
+     fun loadNextItems(language:String="en",category: String= ""){
         viewModelScope.launch {
+            repository.language = language
+            //paginator.loadNextArticles()
             paginator.loadNextArticles(category)
             _isLoading.value = false
         }

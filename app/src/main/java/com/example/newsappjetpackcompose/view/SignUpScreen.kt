@@ -18,8 +18,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -47,6 +51,7 @@ import com.example.newsappjetpackcompose.R
 import com.example.newsappjetpackcompose.ui.theme.RegularFont
 import com.example.newsappjetpackcompose.ui.theme.lightBlue
 import com.example.newsappjetpackcompose.util.Constants
+import com.example.newsappjetpackcompose.util.Languages
 import com.example.newsappjetpackcompose.viewmodel.SignUpViewModel
 import com.example.newsappjetpackcompose.webViewNav.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -59,6 +64,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
     navController: NavController,
@@ -88,6 +94,9 @@ fun SignUpScreen(
     var name by rememberSaveable { mutableStateOf("") }
     var country by rememberSaveable { mutableStateOf("") }
     var language by rememberSaveable { mutableStateOf("") }
+    val isExpanded = remember {
+        mutableStateOf(false)
+    }
     val scope = rememberCoroutineScope()
     val state = viewModel.signUpState.collectAsState(initial = null)
 
@@ -166,25 +175,52 @@ fun SignUpScreen(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = language,
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = lightBlue,
-                cursorColor = Color.Black,
-                disabledLabelColor = lightBlue,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            onValueChange = {
-                language = it
+
+        ExposedDropdownMenuBox(
+            expanded = isExpanded.value, onExpandedChange = {
+                isExpanded.value = it
             },
-            shape = RoundedCornerShape(8.dp),
-            singleLine = true,
-            placeholder = {
-                Text(text = "Language")
+            modifier = Modifier
+                //.padding(top = 10.dp, bottom = 10.dp, start = 5.dp, end = 10.dp)
+                .fillMaxWidth()
+        ) {
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = language,
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = lightBlue,
+                    cursorColor = Color.Black,
+                    disabledLabelColor = lightBlue,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                onValueChange = {
+                   // country = it
+                },
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true,
+                placeholder = {
+                    Text(text = "Language")
+                },
+                readOnly = true,
+            )
+
+            ExposedDropdownMenu(
+                expanded = isExpanded.value,
+                onDismissRequest = { isExpanded.value = false }) {
+
+                Languages.languageCodeMap.forEach { (key,_) ->
+                    DropdownMenuItem(
+                        text = { Text(text = key) },
+                        onClick = {
+                            language = key
+                            //languageCode.value = option.code
+                            isExpanded.value = false
+                        })
+                }
+
             }
-        )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
         TextField(

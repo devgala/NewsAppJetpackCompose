@@ -2,7 +2,7 @@ package com.example.newsappjetpackcompose.util
 
 class Constants {
     companion object{
-        const val API_KEY = "767531723d8542ea8bab5b6826c87485"
+        const val API_KEY = "2b8fdd48f01a4a078cc29266b66626b2"
         const val BASE_URL = "https://newsapi.org"
 
         val CATEGORIES = arrayOf("business", "entertainment", "general", "health", "science", "sports", "technology")

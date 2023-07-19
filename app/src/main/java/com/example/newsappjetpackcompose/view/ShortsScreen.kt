@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,11 +32,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.newsappjetpackcompose.NewsResponse
+import com.example.newsappjetpackcompose.PreferencesManager
 import com.example.newsappjetpackcompose.events.SavedScreenEvents
 import com.example.newsappjetpackcompose.events.UiEventsSavedScreen
 import com.example.newsappjetpackcompose.repository.NewsRepository
 import com.example.newsappjetpackcompose.uicomponents.NewsCard
 import com.example.newsappjetpackcompose.uicomponents.ShortsCard
+import com.example.newsappjetpackcompose.util.Languages
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 import com.example.newsappjetpackcompose.viewmodel.SavedScreenViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -53,13 +56,14 @@ fun ShortsScreenUI(
     snackbarHostState: SnackbarHostState,
     webNavController: NavController
 ) {
-
-
+    val context = LocalContext.current
+    val preferencesManager = remember { PreferencesManager(context) }
+    val spLanguage = remember { mutableStateOf(preferencesManager.getData("language","")) }
+    val langCode = Languages.languageCodeMap[spLanguage.value]
     val state = newsViewModel.screenState
     var savedScreenViewModel: SavedScreenViewModel = hiltViewModel()
     LaunchedEffect(key1 = true) {
-
-        newsViewModel.loadNextItems()
+        newsViewModel.loadNextItems(langCode?:"en")
         savedScreenViewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEventsSavedScreen.showSnackBar -> {
@@ -97,7 +101,7 @@ fun ShortsScreenUI(
                 modifier = Modifier.fillMaxSize()
             ) { index ->
                 if (index >= state.items.size - 1 && !state.endReached && !state.isLoading) {
-                    newsViewModel.loadNextItems()
+                    newsViewModel.loadNextItems(langCode?:"en")
                     Log.d("scroll", "this")
                 }
                 ShortsCard(

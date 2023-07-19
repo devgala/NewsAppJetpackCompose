@@ -13,7 +13,7 @@ class SearchScreenViewModel : ViewModel() {
     var searchQuery by mutableStateOf("")
     val Prepository = paginatonRepository()
     var screenState by mutableStateOf(SearchScreenState())
-    private val paginator = DefaultPaginator(
+     val paginator = DefaultPaginator(
         initialKey = screenState.page,
         onLoadUpdated = {
             screenState = screenState.copy(isLoading = it)
@@ -41,9 +41,14 @@ class SearchScreenViewModel : ViewModel() {
         }
 
     )
+    fun resetList(){
+        screenState  = screenState.copy(items = emptyList())
+    }
 
-    fun getNewsTest() {
+    fun getNewsTest(language:String="en") {
+
         viewModelScope.launch {
+            Prepository.language=language
             paginator.loadNextArticles("")
         }
     }

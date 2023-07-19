@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.newsappjetpackcompose.view.BottomNavInit
+import com.example.newsappjetpackcompose.view.NewsScreenUI
+import com.example.newsappjetpackcompose.view.ProfileScreen
 import com.example.newsappjetpackcompose.view.LoginScreen
 import com.example.newsappjetpackcompose.view.SignUpScreen
 import com.example.newsappjetpackcompose.view.WebViewScreenUI
@@ -46,8 +48,8 @@ fun WebViewNav(
         )){entry ->
             entry.arguments?.getString("url")?.let { WebViewScreenUI(url = it) }
         }
-//        composable(route=Screen.WebViewScreen.route){
-//            WebViewScreenUI(url = "https://www.google.com")
-//        }
+    composable(route = Screen.ProfileScreen.route){
+        ProfileScreen(navController=navController)
+    }
     }
 }

@@ -4,7 +4,11 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
@@ -27,31 +31,38 @@ import com.example.newsappjetpackcompose.bottomNav.NavConfiguration
 import com.example.newsappjetpackcompose.bottomNav.Screens
 import com.example.newsappjetpackcompose.viewmodel.NewsViewModel
 import com.example.newsappjetpackcompose.viewmodel.SearchScreenViewModel
+import com.example.newsappjetpackcompose.webViewNav.Screen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomNavInit(newsViewModel: NewsViewModel, searchViewModel: SearchScreenViewModel, webNavController: NavController) {
+fun BottomNavInit(
+    newsViewModel: NewsViewModel,
+    searchViewModel: SearchScreenViewModel,
+    webNavController: NavController
+) {
     val navController = rememberNavController()
-    val navList = listOf(Screens.NewsScreen, Screens.SearchScreen, Screens.SavedScreen, Screens.ShortsScreen)
+    val navList = listOf(Screens.NewsScreen, Screens.SearchScreen, Screens.ShortsScreen,Screens.SavedScreen)
     val snackbarHostState = remember { SnackbarHostState() }
-    var appBarTitle = rememberSaveable{
+    var appBarTitle = rememberSaveable {
         mutableStateOf("News App")
     }
     var topBarState = rememberSaveable {
         mutableStateOf(true)
     }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    when(navBackStackEntry?.destination?.route){
-        Screens.SearchScreen.route->{
+    when (navBackStackEntry?.destination?.route) {
+        Screens.SearchScreen.route -> {
             topBarState.value = false
         }
-        Screens.SavedScreen.route->{
-            topBarState.value= true
+
+        Screens.SavedScreen.route -> {
+            topBarState.value = true
             appBarTitle.value = "Saved News"
         }
-        Screens.NewsScreen.route->{
-            topBarState.value= true
+
+        Screens.NewsScreen.route -> {
+            topBarState.value = true
             appBarTitle.value = "News App"
         }
         Screens.ShortsScreen.route->{
@@ -60,20 +71,37 @@ fun BottomNavInit(newsViewModel: NewsViewModel, searchViewModel: SearchScreenVie
         }
     }
     Scaffold(
-        bottomBar = { BottomNavBar(navController = navController, items = navList)},
+        bottomBar = { BottomNavBar(navController = navController, items = navList) },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             AnimatedVisibility(visible = topBarState.value) {
-                SmallTopAppBar(title = { Text(text = appBarTitle.value) }, colors= TopAppBarDefaults.smallTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary, titleContentColor = Color.White))
+                SmallTopAppBar(
+                    title = { Text(text = appBarTitle.value) },
+                    colors = TopAppBarDefaults.smallTopAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = Color.White,
+
+                    ),
+                    actions = {
+                        IconButton(onClick = {
+                            webNavController.navigate(Screen.ProfileScreen.route)
+                        }) {
+                            Icon(imageVector = Icons.Default.Person, contentDescription = null,tint= Color.White)
+                        }
+                    }
+                )
 
             }
         }
     ) {
-        Surface(modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = it.calculateBottomPadding(), top = it.calculateTopPadding())) {
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = it.calculateBottomPadding(), top = it.calculateTopPadding())
+        ) {
 
-            NavConfiguration(navController = navController,
+            NavConfiguration(
+                navController = navController,
                 newsViewModel = newsViewModel,
                 searchViewModel = searchViewModel,
                 snackbarHostState = snackbarHostState,
