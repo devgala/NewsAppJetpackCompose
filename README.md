@@ -8,6 +8,8 @@ NewsAppJetpackCompose is a sample news application built using Jetpack Compose. 
 - **WebView Implementation:** Users can view the source article from within the app itself.
 - **Search Functionality:** The app allows users to search for specific news articles based on keywords.
 - **Save Articles:** Users can save their favorite articles for later reading and access them in the Saved Articles section.
+- **Shorts:** Users can glance through daily news with small descriptions and redirect to the main article if they are interested
+- **Google Auth and Preferences:** Users can signup and enter language preferences which can also be changed from within the app.
 - **Pagination:** Articles are loaded ten at a time rather than all at once.
 - **MVVM Architecture:** The app is made following the principles of MVVM architecture.
 
