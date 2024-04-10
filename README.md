@@ -15,7 +15,9 @@ NewsAppJetpackCompose is a sample news application built using Jetpack Compose. 
 
 
 <p align="center">
-  ![alt text](https://github.com/devgala/NewsAppJetpackCompose/blob/main/home.jpeg?raw=true)
+  <img src="https://github.com/devgala/NewsAppJetpackCompose/blob/main/home.jpeg" width="230" height="420" align="left">
+  <img src="https://github.com/devgala/NewsAppJetpackCompose/blob/main/search.jpeg" width="230" height="420" align="center"> 
+  <img src="https://github.com/devgala/NewsAppJetpackCompose/blob/main/saved.jpeg" width="230" height="420" align="right">
 </p>
 
 
